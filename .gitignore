@@ -37,6 +37,4 @@ yarn-error.*
 
 app-example
 /.idea/
-/thirdpartyapp-4a0ea-firebase-adminsdk-fbsvc-530e2a0f54.json
-/google-services.json
-/app.json
+
