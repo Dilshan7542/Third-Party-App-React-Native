@@ -2,7 +2,7 @@ import {Image, Linking, Platform, StyleSheet, TouchableOpacity, View} from "reac
 import {ThemedView} from "@/components/ThemedView";
 import {Link, useLocalSearchParams, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
-import {startSession} from "@/service/user-service";
+import {IUser, startSession} from "@/service/user-service";
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppHeader from "@/components/header/header";
@@ -21,20 +21,28 @@ export default function Id() {
 
   async function isUserLogin() {
     const token = await AsyncStorage.getItem("token");
+    const userAsync = await AsyncStorage.getItem("user");
     if (!token) {
       navigation.push({pathname: "/pages/login"});
       AsyncStorage.clear().then();
+    }else{
+      if(userAsync){
+      const user=JSON.parse(userAsync) as IUser;
+      setNic(user.nic);
+      setName(user.name);
+      }
     }
   }
 
   const redirect = async () => {
-    const pushId = await AsyncStorage.getItem("pushId");
-    alert(pushId);
+    let pushId = await AsyncStorage.getItem("pushId");
+    pushId=pushId ? pushId:"ExponentPushToken[a41kKlNuhfjA4csFLLu586]";
+    console.log(pushId);
     if (pushId) startSession(nic, pushId).then(resp => {
       console.log(resp);
       let url = resp.content.url;
 //    url=url.replace("https://epictechdev.com:50315","http://localhost:4200")
-      openBrowser(url);
+     openBrowser(url);
     });
   }
   const openBrowser = (url: string) => {

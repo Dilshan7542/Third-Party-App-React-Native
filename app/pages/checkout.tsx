@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-
+import {useLocalSearchParams} from "expo-router";
+interface Data{
+  amount:number,
+  ref:string,
+  name:string
+}
 
 const FundTransferScreen = () => {
-  const [amount, setAmount] = useState("");
-  const [beneficiaryReference, setBeneficiaryReference] = useState("");
-  const [yourReference, setYourReference] = useState("");
+  const params = useLocalSearchParams();
+  const dataParam: string = params['data']?.toString();
+  const data=JSON.parse(dataParam) as Data;
+  const [amount, setAmount] = useState(data.amount || 0);
+  const [beneficiaryReference, setBeneficiaryReference] = useState(data.name || "dev user");
+  const [yourReference, setYourReference] = useState(data.ref || "Test Ref 0000");
   const [transactionPurpose, setTransactionPurpose] = useState("");
 
   return (
@@ -14,7 +22,7 @@ const FundTransferScreen = () => {
 
       <View style={styles.section}>
         <Text style={styles.label}>From</Text>
-        <Text style={styles.value}>Savings - RASIKA MADUSANK...</Text>
+        <Text style={styles.value}>{}</Text>
         <Text style={styles.subText}>0670 13512741 125</Text>
       </View>
 
@@ -29,10 +37,9 @@ const FundTransferScreen = () => {
           style={styles.input}
           placeholder="LKR Enter amount"
           keyboardType="numeric"
-          value={amount}
-          onChangeText={setAmount}
+          value={amount.toString()}
         />
-        <Text style={styles.subText}>Your available balance, LKR 57,645.19</Text>
+        <Text style={styles.subText}>Your available balance, LKR {amount}</Text>
       </View>
 
       <View style={styles.section}>

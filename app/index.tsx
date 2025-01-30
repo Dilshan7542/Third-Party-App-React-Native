@@ -8,6 +8,7 @@ import messaging = firebase.messaging;
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {platform} from "node:os";
+import {IUser} from "@/service/user-service";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -31,9 +32,8 @@ export default function HomeScreen() {
         setNotification(notification);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-        console.log(response);
-        console.log(response.notification.request.content);
-        navigation.push({pathname:"/pages/checkout"});
+
+        navigation.push({pathname:"/pages/checkout",params:{data:JSON.stringify(response.notification.request.content.data)}});
 
       });
 
@@ -42,7 +42,19 @@ export default function HomeScreen() {
         responseListener.current && Notifications.removeNotificationSubscription(responseListener.current);
       };
     }
+  isUserLogged();
   }, []);
+  async function isUserLogged() {
+    const token = await AsyncStorage.getItem("token");
+    const userAsync = await AsyncStorage.getItem("user");
+    if (token) {
+      if(userAsync){
+        const user=JSON.parse(userAsync) as IUser;
+        console.log(user)
+      navigation.push({pathname: "/pages/[id]",params:{id:user.id,nic:user.nic,name:user.name}});
+      }
+    }
+  }
  function setUpNotification(){
    registerForPushNotificationsAsync()
      .then(async token => {
