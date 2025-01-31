@@ -1,4 +1,4 @@
-import {Image, Linking, Platform, StyleSheet, TouchableOpacity, View} from "react-native";
+import {AppState, Image, Linking, Platform, StyleSheet, TouchableOpacity, View} from "react-native";
 import {ThemedView} from "@/components/ThemedView";
 import {Link, useLocalSearchParams, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
@@ -6,6 +6,8 @@ import {IUser, startSession} from "@/service/user-service";
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppHeader from "@/components/header/header";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/Store";
 
 
 export default function Id() {
@@ -15,7 +17,9 @@ export default function Id() {
   const navigation = useRouter();
   const [nic, setNic] = useState(nicPram);
   const [name, setName] = useState(nameParam)
+    let userState = useSelector((store:RootState)=> store.user);
   useEffect(() => {
+    console.log(userState);
     isUserLogin();
   }, []);
 

@@ -8,6 +8,9 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AppHeader from "@/components/header/header";
+import {Provider} from "react-redux";
+import {persistor, store} from "@/store/Store";
+import {PersistGate} from "redux-persist/integration/react";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -29,18 +32,22 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme} >
       <Stack>
 {/*        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />*/}
         <Stack.Screen name="index" options={{title:"Start ABCD App"}} key={"index"} />
         <Stack.Screen name="pages/frame-view" options={{title:"Web view"}} key={"frame-view"}/>
         <Stack.Screen name="pages/login" options={{title:"Login Our App"}} key={"login"} />
-        <Stack.Screen name="pages/[id]" options={{headerShown:false}} key={"dashboard"}/>
+        <Stack.Screen name="pages/[id]" options={{headerShown:false}} key={"id"}/>
+        <Stack.Screen name="pages/dashboard" options={{headerShown:false}} key={"dashboard"}/>
         <Stack.Screen name="pages/checkout" options={{title:"Checkout Payment"}} />
         <Stack.Screen name="+not-found" />
-
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
+      </PersistGate>
+    </Provider>
   );
 }
