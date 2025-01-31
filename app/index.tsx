@@ -2,18 +2,20 @@ import React, {useEffect, useRef, useState} from "react";
 import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useRouter} from "expo-router";
 import * as Notifications from 'expo-notifications';
-import firebase from "firebase/compat";
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {IUser} from "@/service/user-service";
 import {useDispatch, useSelector} from "react-redux";
 
 import {AppDispatch, RootState} from "@/store/Store";
 import {setAuthPushId} from "@/store/auth/AuthAction";
+import {readyToCheckout} from "@/store/checkout/CheckoutAction";
+import {readyToCheckoutApi} from "@/service/client-service";
+import {SUCCESS} from "@/constants/ResponseCode";
+import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 
 export default function HomeScreen() {
-  const useStore = useSelector((store:RootState)=> store.user);
-  const authStore = useSelector((store:RootState)=> store.auth);
+  const useStore = useSelector((store: RootState) => store.user);
+  const authStore = useSelector((store: RootState) => store.auth);
+  const checkoutStore = useSelector((store: RootState) => store.checkout);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useRouter();
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -33,11 +35,33 @@ export default function HomeScreen() {
         setNotification(notification);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-
-        navigation.push({
-          pathname: "/pages/checkout",
-          params: {data: JSON.stringify(response.notification.request.content.data)}
-        });
+        const data = response.notification.request.content.data;
+        console.log(data)
+        if (useStore.user) {
+          if(useStore.user.nic=== data.nic){
+            readyToCheckoutApi(useStore.user.nic).then(resp=>{
+              if (resp.status === SUCCESS) {
+                const content = resp.content;
+                const trans:CheckoutTransaction={
+                  date:new Date().toISOString(),
+                  accountName:content.toAccountName,
+                  fromAccountList:content.fromAccountList,
+                  toAccount:content.toAccount,
+                  amount:data.amount,
+                  ref:data.refNumber
+                }
+                dispatch(readyToCheckout(trans))
+                navigation.push({
+                  pathname: "/pages/checkout"
+                });
+              }else{
+                alert(resp.message);
+              }
+            }).catch(error=>{
+              alert("Error 500");
+            });
+          }
+        }
 
       });
 
@@ -50,16 +74,15 @@ export default function HomeScreen() {
   }, []);
 
   async function isUserLogged() {
-
     if (authStore.token) {
-        navigation.push({pathname: "/pages/dashboard"});
+      navigation.navigate({pathname: "/pages/dashboard"});
     }
   }
 
   function setUpNotification() {
     registerForPushNotificationsAsync()
       .then(async pushID => {
-          dispatch(setAuthPushId(pushID));
+        dispatch(setAuthPushId(pushID));
         setExpoPushToken(pushID ?? '')
       })
       .catch((error: any) => setExpoPushToken(`${error}`));
@@ -67,28 +90,28 @@ export default function HomeScreen() {
   }
 
   return (<View style={styles.container}>
-      {/* Logo or Image */}
-      <Image
-        source={{
-          uri: "https://example.com/your-image.png", // Replace with your image URL
-        }}
-        style={styles.image}
-      />
+    {/* Logo or Image */}
+    <Image
+      source={{
+        uri: "https://example.com/your-image.png", // Replace with your image URL
+      }}
+      style={styles.image}
+    />
 
-      {/* Welcome Text */}
-      <Text style={styles.title}>Welcome to Our App</Text>
-      <Text style={styles.subtitle}>
-        Discover amazing features and get started on your journey!
-      </Text>
+    {/* Welcome Text */}
+    <Text style={styles.title}>Welcome to Our App</Text>
+    <Text style={styles.subtitle}>
+      Discover amazing features and get started on your journey!
+    </Text>
 
-      {/* Get Started Button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.push("/pages/login")} // Navigate to Home screen
-      >
-        <Text style={styles.buttonText}>Get Started</Text>
-      </TouchableOpacity>
-    </View>);
+    {/* Get Started Button */}
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => navigation.push("/pages/login")} // Navigate to Home screen
+    >
+      <Text style={styles.buttonText}>Get Started</Text>
+    </TouchableOpacity>
+  </View>);
 }
 
 const styles = StyleSheet.create({

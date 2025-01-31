@@ -1,34 +1,58 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import {useLocalSearchParams} from "expo-router";
-interface Data{
-  amount:number,
-  ref:string,
-  name:string
+import React, {useEffect, useState} from "react";
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/Store";
+import RNPickerSelect from "react-native-picker-select";
+import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
+import {ThemedText} from "@/components/ThemedText";
+
+interface LabelAccount {
+  label: string,
+  value: string
 }
 
 const FundTransferScreen = () => {
-  const params = useLocalSearchParams();
-  const dataParam: string = params['data']?.toString();
-  const data=JSON.parse(dataParam) as Data;
-  const [amount, setAmount] = useState(data.amount || 0);
-  const [beneficiaryReference, setBeneficiaryReference] = useState(data.name || "dev user");
-  const [yourReference, setYourReference] = useState(data.ref || "Test Ref 0000");
-  const [transactionPurpose, setTransactionPurpose] = useState("");
-
+  const useStore = useSelector((store: RootState) => store.user);
+  const checkoutStore = useSelector((store: RootState) => store.checkout);
+  const [selectedAccount, setSelectedAccount] = useState<string>("");
+  const [bankList, setBankList] = useState<LabelAccount[]>([])
+  const [detail, setDetail] = useState<CheckoutTransaction>({
+    accountName:"",
+    date:new Date().toString(),
+    amount:0,
+    ref:"",
+    fromAccountList:[],
+    toAccount:""
+  });
+  useEffect(() => {
+    const data = checkoutStore.data;
+    if (data) {
+      const labelAccount: LabelAccount[] = [];
+      data.fromAccountList.map(m => {
+        labelAccount.push({label: m, value: m});
+      });
+      setBankList(labelAccount);
+      setDetail(data);
+    }
+  }, []);
+  if(!detail){
+   return (<ThemedText><ThemedText>Test</ThemedText></ThemedText>)
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Fund Transfer</Text>
-
       <View style={styles.section}>
         <Text style={styles.label}>From</Text>
-        <Text style={styles.value}>{}</Text>
-        <Text style={styles.subText}>0670 13512741 125</Text>
+        <RNPickerSelect
+          onValueChange={(value) => setSelectedAccount(value)}
+          items={bankList}
+          placeholder={{label: "Select an option...", value: null}}
+        />
       </View>
 
       <View style={styles.section}>
         <Text style={styles.label}>To</Text>
-        <TextInput style={styles.input} placeholder="Select your beneficiary account" />
+        <TextInput style={styles.input} placeholder="Select your beneficiary account"/>
       </View>
 
       <View style={styles.section}>
@@ -37,33 +61,22 @@ const FundTransferScreen = () => {
           style={styles.input}
           placeholder="LKR Enter amount"
           keyboardType="numeric"
-          value={amount.toString()}
+          value={detail.amount.toString()}
+          readOnly={true}
         />
-        <Text style={styles.subText}>Your available balance, LKR {amount}</Text>
+        <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>
       </View>
-
       <View style={styles.section}>
         <Text style={styles.label}>When</Text>
-        <Text style={styles.value}>Today, 30 Jan 2025</Text>
+        <Text style={styles.value}>{detail.date}</Text>
       </View>
-
       <View style={styles.section}>
-        <Text style={styles.label}>Beneficiary Reference *</Text>
+        <Text style={styles.label}>Receiver's Name</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter beneficiary reference"
-          value={beneficiaryReference}
-          onChangeText={setBeneficiaryReference}
-        />
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.label}>Your Reference</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your reference"
-          value={yourReference}
-          onChangeText={setYourReference}
+          value={detail.accountName}
+          readOnly={true}
         />
       </View>
 
