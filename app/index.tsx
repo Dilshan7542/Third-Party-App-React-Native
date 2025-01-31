@@ -75,7 +75,9 @@ export default function HomeScreen() {
 
   async function isUserLogged() {
     if (authStore.token) {
-      navigation.navigate({pathname: "/pages/dashboard"});
+      setTimeout(()=>{
+     navigation.navigate({pathname: "/pages/dashboard"});
+      },100)
     }
   }
 

@@ -39,6 +39,8 @@ export default function DashBoard() {
       console.log(resp);
       let url = resp.content.url;
       openBrowser(url);
+    }).catch(error=>{
+      console.log(error)
     });
   }
   const openBrowser = (url: string) => {
@@ -109,13 +111,16 @@ export default function DashBoard() {
   <ThemedText>Food City</ThemedText>
   </ThemedView>
   </TouchableOpacity>
+
   <TouchableOpacity style={styles.cartItem}>
+    <Link href={"/pages/checkout"}>
   <ThemedView style={styles.cartChildItem}>
   <Image
     source={require("../../assets/images/abans.png")}
   style={styles.cartImage}/>
   <ThemedText>Abans</ThemedText>
   </ThemedView>
+    </Link>
   </TouchableOpacity>
   </ThemedView>
   </ThemedView>

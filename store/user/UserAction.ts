@@ -27,7 +27,7 @@ export const userLoginAsync = createAsyncThunk<IUser,{
         dispatch(authAddToken(response.content.access_token));
         const user:IUser={
           id:new Date().toString()+":user",
-          nic:response.content.nic || "970490078V",
+          nic:response.content.nic || "200001803909",
           name:response.content.name || "Dev User"
         }
         return user;

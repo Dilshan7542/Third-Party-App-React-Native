@@ -13,6 +13,7 @@ const init:AuthState={};
 export const authReducer= createReducer(init,(stateBuilder)=>{
   stateBuilder.addCase(authAddToken,(state, action)=>{
     return{
+      ...state,
       token:action.payload
     }
   }).addCase(setAuthPushId,(state, action)=> {
