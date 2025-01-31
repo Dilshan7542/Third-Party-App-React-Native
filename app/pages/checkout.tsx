@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Linking, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/Store";
 import RNPickerSelect from "react-native-picker-select";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {ThemedText} from "@/components/ThemedText";
+import {processPaymentApi} from "@/service/client-service";
+import {SUCCESS} from "@/constants/ResponseCode";
 
 interface LabelAccount {
   label: string,
@@ -35,6 +37,21 @@ const FundTransferScreen = () => {
       setDetail(data);
     }
   }, []);
+  const processPayment=()=>{
+    if(useStore.user)
+    processPaymentApi({
+      nic:useStore.user.nic,
+      amount:detail.amount,
+      transactionRef:detail.ref
+    }).then(resp=>{
+      if (resp.status === SUCCESS) {
+        openBrowser(resp.content.webUrl);
+      }
+    });
+  }
+  const openBrowser = (url: string) => {
+    Linking.openURL(url).catch((err) => console.error("An error occurred", err));
+  };
   if(!detail){
    return (<ThemedText><ThemedText>Test</ThemedText></ThemedText>)
   }
@@ -80,7 +97,7 @@ const FundTransferScreen = () => {
         />
       </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={processPayment}>
         <Text style={styles.buttonText}>Proceed to pay</Text>
       </TouchableOpacity>
     </View>

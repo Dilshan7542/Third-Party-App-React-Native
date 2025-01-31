@@ -41,6 +41,7 @@ export default function DashBoard() {
       openBrowser(url);
     }).catch(error=>{
       console.log(error)
+      alert(error);
     });
   }
   const openBrowser = (url: string) => {
