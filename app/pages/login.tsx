@@ -1,21 +1,23 @@
 import React, {useEffect, useState} from "react";
 import {Alert, Button, StyleSheet, TextInput} from "react-native";
-import {IUser, userLogin} from "@/service/user-service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useRouter} from "expo-router";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
+import {useSelector,useDispatch} from "react-redux";
+import {AppDispatch, RootState} from "@/store/Store";
+import {userLoginAsync} from "@/store/user/UserAction";
 
 const LoginScreen = () => {
+  const useStore = useSelector((store:RootState)=> store.user);
+  const tokenStore = useSelector((store:RootState)=> store.auth);
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     checkUserIfExist();
   }, []);
   const checkUserIfExist = async () => {
-    const token = await AsyncStorage.getItem("token");
-    const userString = await AsyncStorage.getItem("user");
-    if (token && userString) {
-      const user = JSON.parse(userString) as IUser;
-      navigation.push({pathname: "/pages/[id]", params: {nic: user.nic, id: user.id, name: user.name}});
+    if (tokenStore.token) {
+      navigation.push({pathname: "/pages/dashboard"});
     } else {
       await AsyncStorage.clear();
     }
@@ -27,20 +29,11 @@ const LoginScreen = () => {
     if (!nic || !password) {
       Alert.alert("Error", "Please fill out all fields!");
     } else {
-      alert("valid");
-      userLogin({nic: nic, password: password}).then(async resp => {
-        await AsyncStorage.setItem("token", resp.content.access_token);
-        const user: IUser = {
-          id: new Date().toString() + ":user",
-          nic: resp.content.nic || nic,
-          name: resp.content.name || "Dev User"
-        }
-        await AsyncStorage.setItem("user", JSON.stringify(user));
-        navigation.push({pathname: "/pages/[id]", params: {nic: user.nic, id: user.id, name: user.name}});
-      }).catch(e => {
-        alert("Error 500");
-      });
-
+        dispatch(userLoginAsync({nic,password})).then(res=>{
+          navigation.push({pathname: "/pages/dashboard"});
+        }).catch(error=>{
+         alert("Error 500")
+        });
     }
   };
   return (<ThemedView style={styles.container}>

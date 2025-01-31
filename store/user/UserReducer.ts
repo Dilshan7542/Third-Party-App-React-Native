@@ -23,6 +23,9 @@ stateBuilder
             user:action.payload
         }
     })
+  .addCase(userAction.userLoginAsync.rejected,(_state,action)=>{
+   return init;
+  })
     .addCase(userAction.userLogout,()=> init)
     .addCase(userAction.userSave,(_state, action)=> action.payload);
 

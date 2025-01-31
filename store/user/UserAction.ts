@@ -1,10 +1,10 @@
 import {createAction, createAsyncThunk} from "@reduxjs/toolkit";
 import {IUser, UserState} from "./UserReducer";
 import {userLogin} from "@/service/user-service";
-import {ResponseCode} from "@/constants/ResponseCode";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useRouter} from "expo-router";
-const navigation = useRouter();
+import {SUCCESS} from "@/constants/ResponseCode";
+import {authAddToken} from "@/store/auth/AuthAction";
 export const userInit= createAction("[USER] INIT");
 export const userLoginSuccess= createAction<IUser>("[USER] LOGIN_SUCCESS");
 export const userLogout= createAction("[USER] LOGOUT");
@@ -20,17 +20,16 @@ export const userLoginAsync = createAsyncThunk<IUser,{
   "password": string
 }>(
   "[USER] LOGIN",
-  async (userCredential, { rejectWithValue }) => {
+  async (userCredential, { rejectWithValue ,dispatch}) => {
     try {
       const response = await userLogin(userCredential);
-      if (response.status === ResponseCode.SUCCESS) {
-        await AsyncStorage.setItem("token", response.content.access_token);
+      if (response.status === SUCCESS) {
+        dispatch(authAddToken(response.content.access_token));
         const user:IUser={
           id:new Date().toString()+":user",
-          nic:response.content.nic,
+          nic:response.content.nic || "970490078V",
           name:response.content.name || "Dev User"
         }
-        navigation.push({pathname: "/pages/[id]", params: {nic: user.nic, id: user.id,name:user.name}});
         return user;
         }
       return rejectWithValue(response.message);

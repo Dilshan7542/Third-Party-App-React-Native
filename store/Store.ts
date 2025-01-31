@@ -2,6 +2,7 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import {userReducer, UserState} from "./user/UserReducer";
 import { persistStore, persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {authReducer} from "@/store/auth/AuthReducer";
 export type AppError={
   message:string,
   title:string
@@ -11,7 +12,8 @@ const persistConfig = {
     storage: AsyncStorage, // Use AsyncStorage for React Native
 };
 const rootReducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+  auth:authReducer
 });
 // 🔹 Create Persisted Reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);

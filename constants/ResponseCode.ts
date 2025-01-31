@@ -1,3 +1,2 @@
-export class ResponseCode{
- static SUCCESS:"R000"
-}
+
+export const SUCCESS="R000";

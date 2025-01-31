@@ -11,41 +11,33 @@ import {RootState} from "@/store/Store";
 
 
 export default function DashBoard() {
-  const params = useLocalSearchParams();
-  const nicPram: string = params['nic']?.toString();
-  const nameParam: string = params['name']?.toString();
   const navigation = useRouter();
-  const [nic, setNic] = useState(nicPram);
-  const [name, setName] = useState(nameParam)
-  let userState = useSelector((store:RootState)=> store.user);
+  const [nic, setNic] = useState("");
+  const [name, setName] = useState("")
+  const userState = useSelector((store:RootState)=> store.user);
+  const authState = useSelector((store:RootState)=> store.auth);
   useEffect(() => {
-    console.log(userState);
     isUserLogin();
   }, []);
 
   async function isUserLogin() {
-    const token = await AsyncStorage.getItem("token");
-    const userAsync = await AsyncStorage.getItem("user");
-    if (!token) {
-      navigation.push({pathname: "/pages/login"});
-      AsyncStorage.clear().then();
+    if (!authState.token || !userState.user) {
+    navigation.push({pathname: "/pages/login"});
     }else{
-      if(userAsync){
-        const user=JSON.parse(userAsync) as IUser;
-        setNic(user.nic);
-        setName(user.name);
+      if(userState.user){
+        setNic(userState.user.nic);
+        setName(userState.user.name);
       }
     }
   }
 
   const redirect = async () => {
-    let pushId = await AsyncStorage.getItem("pushId");
+    let pushId = authState.pushId;
     pushId=pushId ? pushId:"ExponentPushToken[a41kKlNuhfjA4csFLLu586]";
     console.log(pushId);
-    if (pushId) startSession(nic, pushId).then(resp => {
+    if (pushId && userState.user) startSession(userState.user.nic, pushId).then(resp => {
       console.log(resp);
       let url = resp.content.url;
-//    url=url.replace("https://epictechdev.com:50315","http://localhost:4200")
       openBrowser(url);
     });
   }

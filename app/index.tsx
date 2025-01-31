@@ -6,15 +6,16 @@ import firebase from "firebase/compat";
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {IUser} from "@/service/user-service";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
-import {AppDispatch} from "@/store/Store";
+import {AppDispatch, RootState} from "@/store/Store";
+import {setAuthPushId} from "@/store/auth/AuthAction";
 
 export default function HomeScreen() {
-
+  const useStore = useSelector((store:RootState)=> store.user);
+  const authStore = useSelector((store:RootState)=> store.auth);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useRouter();
-  useSele
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);
   const notificationListener = useRef<Notifications.EventSubscription>();
@@ -34,7 +35,7 @@ export default function HomeScreen() {
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
 
         navigation.push({
-          pathname: "pages/checkout",
+          pathname: "/pages/checkout",
           params: {data: JSON.stringify(response.notification.request.content.data)}
         });
 
@@ -49,24 +50,17 @@ export default function HomeScreen() {
   }, []);
 
   async function isUserLogged() {
-    const token = await AsyncStorage.getItem("token");
-    const userAsync = await AsyncStorage.getItem("user");
 
-    if (token) {
-      if (userAsync) {
-        const user = JSON.parse(userAsync) as IUser;
-        console.log(user)
-        navigation.push({pathname: "/pages/[id]", params: {id: user.id, nic: user.nic, name: user.name}});
-      }
+    if (authStore.token) {
+        navigation.push({pathname: "/pages/dashboard"});
     }
   }
 
   function setUpNotification() {
     registerForPushNotificationsAsync()
-      .then(async token => {
-        console.log(token);
-        await AsyncStorage.setItem("pushId", token || "");
-        setExpoPushToken(token ?? '')
+      .then(async pushID => {
+          dispatch(setAuthPushId(pushID));
+        setExpoPushToken(pushID ?? '')
       })
       .catch((error: any) => setExpoPushToken(`${error}`));
 
