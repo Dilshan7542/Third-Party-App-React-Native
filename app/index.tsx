@@ -37,9 +37,11 @@ export default function HomeScreen() {
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         const data = response.notification.request.content.data;
         console.log(data)
+        alert("Notify Amount: "+data.amount);
         if (useStore.user) {
-          if(useStore.user.nic=== data.nic){
+        alert("Notify User: "+useStore.user.nic);
             readyToCheckoutApi(useStore.user.nic).then(resp=>{
+        alert("Resp status: "+resp.status);
               if (resp.status === SUCCESS) {
                 const content = resp.content;
                 const trans:CheckoutTransaction={
@@ -61,7 +63,6 @@ export default function HomeScreen() {
               alert("Error 500");
             });
           }
-        }
 
       });
 
