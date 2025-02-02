@@ -36,7 +36,7 @@ export default function RootLayout() {
           <Stack>
             {/*        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />*/}
             <Stack.Screen name="index" options={{title: "Start ABCD App"}} key={"index"}/>
-            <Stack.Screen name="pages/frame-view" options={{title: "Web view"}} key={"frame-view"}/>
+            <Stack.Screen name="pages/frame-view" options={{title: "Web view"}} key={"frame-view"} />
             <Stack.Screen name="pages/login" options={{title: "Login Our App"}} key={"login"}/>
             <Stack.Screen name="pages/[id]" options={{headerShown: false}} key={"id"}/>
             <Stack.Screen name="pages/dashboard" options={{headerShown: false}} key={"dashboard"}/>

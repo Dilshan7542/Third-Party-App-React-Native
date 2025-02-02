@@ -18,16 +18,10 @@ const FundTransferScreen = () => {
   const checkoutStore = useSelector((store: RootState) => store.checkout);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [bankList, setBankList] = useState<LabelAccount[]>([])
-  const [detail, setDetail] = useState<CheckoutTransaction>({
-    accountName:"",
-    date:new Date().toString(),
-    amount:0,
-    ref:"",
-    fromAccountList:[],
-    toAccount:""
-  });
+  const [detail, setDetail] = useState<CheckoutTransaction | undefined>();
   useEffect(() => {
     const data = checkoutStore.data;
+    console.log(data);
     if (data) {
       const labelAccount: LabelAccount[] = [];
       data.fromAccountList.map(m => {
@@ -38,16 +32,21 @@ const FundTransferScreen = () => {
     }
   }, []);
   const processPayment=()=>{
-    if(useStore.user)
-    processPaymentApi({
-      nic:useStore.user.nic,
-      amount:detail.amount,
-      transactionRef:detail.ref
-    }).then(resp=>{
-      if (resp.status === SUCCESS) {
-        openBrowser(resp.content.webUrl);
-      }
-    });
+    if(useStore.user && detail){
+      processPaymentApi({
+        nic:useStore.user.nic,
+        amount:detail.amount,
+        transactionRef:detail.ref
+      }).then(resp=>{
+        console.log(resp);
+        if (resp.status === SUCCESS) {
+          openBrowser(resp.content.webUrl);
+        }
+      }).catch(e=>{
+        console.error(e);
+      });
+    }
+
   }
   const openBrowser = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
@@ -61,6 +60,7 @@ const FundTransferScreen = () => {
       <View style={styles.section}>
         <Text style={styles.label}>From</Text>
         <RNPickerSelect
+          value={detail.fromAccountList[0] || "no account"}
           onValueChange={(value) => setSelectedAccount(value)}
           items={bankList}
           placeholder={{label: "Select an option...", value: null}}
@@ -68,8 +68,8 @@ const FundTransferScreen = () => {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.label}>To</Text>
-        <TextInput style={styles.input} placeholder="Select your beneficiary account"/>
+        <Text style={styles.label}>To Account</Text>
+        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} />
       </View>
 
       <View style={styles.section}>
@@ -81,10 +81,10 @@ const FundTransferScreen = () => {
           value={detail.amount.toString()}
           readOnly={true}
         />
-        <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>
+       {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
       </View>
       <View style={styles.section}>
-        <Text style={styles.label}>When</Text>
+        <Text style={styles.label}>Date</Text>
         <Text style={styles.value}>{detail.date}</Text>
       </View>
       <View style={styles.section}>

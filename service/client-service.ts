@@ -15,7 +15,8 @@ export const readyToCheckoutApi=async (nic:string)=>{
   return response.data;
 }
 export const processPaymentApi=async (req:ProcessPaymentReq)=>{
+  console.log("Request Payment ",req)
   const response = await apiClient.post<AppResponse<{webUrl:string}>>("/third-party/user/pay-lottery",req);
-  console.log(response);
+  console.log("Response Process Payment ",response.data);
   return response.data;
 }

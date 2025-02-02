@@ -11,6 +11,7 @@ import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 import {readyToCheckoutApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
+import {userReducer} from "@/store/user/UserReducer";
 
 export default function HomeScreen() {
   const useStore = useSelector((store: RootState) => store.user);
@@ -35,23 +36,26 @@ export default function HomeScreen() {
         setNotification(notification);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-        const data = response.notification.request.content.data;
-        console.log(data)
-        alert("Notify Amount: "+data.amount);
+        const dataString = response.notification.request.content.data;
+        const data = JSON.parse(dataString.body);
+        console.log(data);
+          console.log(useStore.user);
         if (useStore.user) {
-        alert("Notify User: "+useStore.user.nic);
             readyToCheckoutApi(useStore.user.nic).then(resp=>{
-        alert("Resp status: "+resp.status);
               if (resp.status === SUCCESS) {
                 const content = resp.content;
+                console.log("response content ",resp.content)
+                const newDate = new Date();
+                const date=newDate.toISOString().split("T")[0]+"  "+newDate.getHours()+":"+newDate.getMinutes()+":"+newDate.getMilliseconds();
                 const trans:CheckoutTransaction={
-                  date:new Date().toISOString(),
+                  date:date,
                   accountName:content.toAccountName,
                   fromAccountList:content.fromAccountList,
                   toAccount:content.toAccount,
                   amount:data.amount,
                   ref:data.refNumber
                 }
+                console.log("\n\n\nbuild trans :",trans)
                 dispatch(readyToCheckout(trans))
                 navigation.push({
                   pathname: "/pages/checkout"
@@ -73,7 +77,9 @@ export default function HomeScreen() {
     }
     isUserLogged();
   }, []);
-
+  useEffect(() => {
+    return ()=>{};
+  }, []);
   async function isUserLogged() {
     if (authStore.token) {
       setTimeout(()=>{
