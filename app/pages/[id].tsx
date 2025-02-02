@@ -1,4 +1,4 @@
-import {AppState, Image, Linking, Platform, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Image, Linking, StyleSheet, TouchableOpacity} from "react-native";
 import {ThemedView} from "@/components/ThemedView";
 import {Link, useLocalSearchParams, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
@@ -17,7 +17,7 @@ export default function Id() {
   const navigation = useRouter();
   const [nic, setNic] = useState(nicPram);
   const [name, setName] = useState(nameParam)
-    let userState = useSelector((store:RootState)=> store.user);
+  let userState = useSelector((store: RootState) => store.user);
   useEffect(() => {
     console.log(userState);
     isUserLogin();
@@ -29,106 +29,106 @@ export default function Id() {
     if (!token) {
       navigation.push({pathname: "/pages/login"});
       AsyncStorage.clear().then();
-    }else{
-      if(userAsync){
-      const user=JSON.parse(userAsync) as IUser;
-      setNic(user.nic);
-      setName(user.name);
+    } else {
+      if (userAsync) {
+        const user = JSON.parse(userAsync) as IUser;
+        setNic(user.nic);
+        setName(user.name);
       }
     }
   }
 
   const redirect = async () => {
     let pushId = await AsyncStorage.getItem("pushId");
-    pushId=pushId ? pushId:"ExponentPushToken[a41kKlNuhfjA4csFLLu586]";
+    pushId = pushId ? pushId : "ExponentPushToken[a41kKlNuhfjA4csFLLu586]";
     console.log(pushId);
     if (pushId) startSession(nic, pushId).then(resp => {
       console.log(resp);
       let url = resp.content.url;
 //    url=url.replace("https://epictechdev.com:50315","http://localhost:4200")
-     openBrowser(url);
+      openBrowser(url);
     });
   }
   const openBrowser = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
 
-  return (<ThemedView style={{flex:1}}>
+  return (<ThemedView style={{flex: 1}}>
     <AppHeader name={name}></AppHeader>
-      <ThemedView style={{...styles.flexCenter, justifyContent: "center", alignItems: "center",minHeight:"50%"}}>
-        <ThemedView style={{display: "flex", width: '100%', flexDirection: "row", padding: 5, flexWrap: "wrap"}}>
-          <TouchableOpacity style={styles.cartItem} onPress={redirect}>
+    <ThemedView style={{...styles.flexCenter, justifyContent: "center", alignItems: "center", minHeight: "50%"}}>
+      <ThemedView style={{display: "flex", width: '100%', flexDirection: "row", padding: 5, flexWrap: "wrap"}}>
+        <TouchableOpacity style={styles.cartItem} onPress={redirect}>
+          <ThemedView style={styles.cartChildItem}>
+            <Image
+              source={require("../../assets/images/Sweep-logo.png")}
+              style={styles.cartImage}/>
+            <ThemedText>DLB App</ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cartItem}>
+          <Link href={{pathname: "/pages/frame-view", params: {url: "https://www.google.com/", nic: nic}}}>
             <ThemedView style={styles.cartChildItem}>
               <Image
-                source={require("../../assets/images/Sweep-logo.png")}
+                source={require("../../assets/images/nlb.png")}
                 style={styles.cartImage}/>
-              <ThemedText>DLB App</ThemedText>
+              <ThemedText>DLB Apps2</ThemedText>
             </ThemedView>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cartItem}>
-            <Link href={{pathname: "/pages/frame-view", params: {url: "https://www.google.com/", nic: nic}}}>
-              <ThemedView style={styles.cartChildItem}>
-                <Image
-                  source={require("../../assets/images/nlb.png")}
-                  style={styles.cartImage}/>
-                <ThemedText>DLB Apps</ThemedText>
-              </ThemedView>
-            </Link>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cartItem}>
-            <Link href={{pathname: "/pages/frame-view", params: {url: "https://www.google.com/"}}}>
-              <ThemedView style={styles.cartChildItem}>
-                <Image
-                  source={require("../../assets/images/damro.png")}
-                  style={styles.cartImage}/>
-                <ThemedText>DLB App</ThemedText>
-              </ThemedView>
-            </Link>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cartItem}>
-            <ThemedView style={styles.cartChildItem}>
-              <Image
-                source={require("../../assets/images/iit.png")}
-                style={styles.cartImage}/>
-              <ThemedText>IIT</ThemedText>
-            </ThemedView>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cartItem}>
+          </Link>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cartItem}>
+          <Link href={{pathname: "/pages/frame-view", params: {url: "https://www.google.com/"}}}>
             <ThemedView style={styles.cartChildItem}>
               <Image
                 source={require("../../assets/images/damro.png")}
                 style={styles.cartImage}/>
-              <ThemedText>Damro</ThemedText>
+              <ThemedText>DLB App</ThemedText>
             </ThemedView>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cartItem}>
-            <ThemedView style={styles.cartChildItem}>
-              <Image
-                source={require("../../assets/images/keels.png")}
-                style={styles.cartImage}/>
-              <ThemedText>Keels</ThemedText>
-            </ThemedView>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cartItem}>
-            <ThemedView style={styles.cartChildItem}>
-              <Image
-                source={require("../../assets/images/foodCity.jpg")}
-                style={styles.cartImage}/>
-              <ThemedText>Food City</ThemedText>
-            </ThemedView>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cartItem}>
-            <ThemedView style={styles.cartChildItem}>
-              <Image
-                source={require("../../assets/images/abans.png")}
-                style={styles.cartImage}/>
-              <ThemedText>Abans</ThemedText>
-            </ThemedView>
-          </TouchableOpacity>
-        </ThemedView>
+          </Link>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cartItem}>
+          <ThemedView style={styles.cartChildItem}>
+            <Image
+              source={require("../../assets/images/iit.png")}
+              style={styles.cartImage}/>
+            <ThemedText>IIT</ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cartItem}>
+          <ThemedView style={styles.cartChildItem}>
+            <Image
+              source={require("../../assets/images/damro.png")}
+              style={styles.cartImage}/>
+            <ThemedText>Damro</ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cartItem}>
+          <ThemedView style={styles.cartChildItem}>
+            <Image
+              source={require("../../assets/images/keels.png")}
+              style={styles.cartImage}/>
+            <ThemedText>Keels</ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cartItem}>
+          <ThemedView style={styles.cartChildItem}>
+            <Image
+              source={require("../../assets/images/foodCity.jpg")}
+              style={styles.cartImage}/>
+            <ThemedText>Food City</ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cartItem}>
+          <ThemedView style={styles.cartChildItem}>
+            <Image
+              source={require("../../assets/images/abans.png")}
+              style={styles.cartImage}/>
+            <ThemedText>Abans</ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
       </ThemedView>
+    </ThemedView>
 
-    </ThemedView>)
+  </ThemedView>)
 }
 const styles = StyleSheet.create({
   container: {

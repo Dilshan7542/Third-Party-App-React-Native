@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppHeader from "@/components/header/header";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/Store";
+import {openBrowserAsync} from "expo-web-browser";
 
 
 export default function DashBoard() {
@@ -45,7 +46,10 @@ export default function DashBoard() {
     });
   }
   const openBrowser = (url: string) => {
-    Linking.openURL(url).catch((err) => console.error("An error occurred", err));
+    openBrowserAsync(url).catch(()=>{
+      console.error("Error Browser not available");
+    Linking.openURL(url).catch((err) => console.error("An error occurred", err))
+    });
   };
 
   return (<ThemedView style={{flex:1}}>
@@ -66,7 +70,7 @@ export default function DashBoard() {
   <Image
     source={require("../../assets/images/nlb.png")}
   style={styles.cartImage}/>
-  <ThemedText>DLB Apps</ThemedText>
+  <ThemedText>NLB Apps</ThemedText>
   </ThemedView>
   </Link>
   </TouchableOpacity>
@@ -76,7 +80,7 @@ export default function DashBoard() {
   <Image
     source={require("../../assets/images/damro.png")}
   style={styles.cartImage}/>
-  <ThemedText>DLB App</ThemedText>
+  <ThemedText>Damro App</ThemedText>
   </ThemedView>
   </Link>
   </TouchableOpacity>

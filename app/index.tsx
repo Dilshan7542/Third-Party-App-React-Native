@@ -39,6 +39,8 @@ export default function HomeScreen() {
         const dataString = response.notification.request.content.data;
         const data = JSON.parse(dataString.body);
         console.log(data);
+        alert(dataString);
+        alert("amount :"+data.amount+" | ref : "+data.refNumber);
           console.log(useStore.user);
         if (useStore.user) {
             readyToCheckoutApi(useStore.user.nic).then(resp=>{
@@ -52,7 +54,7 @@ export default function HomeScreen() {
                   accountName:content.toAccountName,
                   fromAccountList:content.fromAccountList,
                   toAccount:content.toAccount,
-                  amount:data.amount,
+                  amount:data.amount || 1000000,
                   ref:data.refNumber
                 }
                 console.log("\n\n\nbuild trans :",trans)
