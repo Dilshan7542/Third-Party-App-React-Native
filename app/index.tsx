@@ -36,46 +36,29 @@ export default function HomeScreen() {
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         Alert.alert("notification work 2",JSON.stringify(response.notification));
+          let dataString=response.notification.request.content.data;
         try {
-          alert("notification work 3");
-          let dataString:any;
-          try {
-            dataString=response.notification.request.content.data;
-          }catch (e){
-            alert("Second chatch occur");
-          }
-         const test= JSON.stringify(dataString);
-          alert(test);
-         Alert.alert("Check debug",test);
-          alert("notification work 4");
           let data: any;
-
-          if (dataString) {
+          if(typeof dataString ==="string"){
+            alert("1");
             try {
-            Alert.alert("data sting",JSON.stringify(dataString));
+            data=JSON.parse(dataString);
             }catch (e){
-              alert("data string error");
+              Alert.alert("error dataString",JSON.stringify(e));
             }
-            if (dataString.body) {
-              data = JSON.parse(dataString.body);
-              alert("notification work 52");
-            } else {
-              data.amount = 6000000;
-              data.refNumber = "TestDemoRef 2";
-              alert("notification work 5");
+          }else{
+            alert("2");
+            data=dataString;
+          }
+          if(useStore){
+            if(useStore.user){
+          Alert.alert("User Store",JSON.stringify(useStore.user));
+            }else{
+              alert("user dont have");
             }
-          } else {
-            data.amount = 5000000;
-            data.refNumber = "TestDemoRef";
-            alert("notification work 6");
+          }else{
+            alert("store dont have")
           }
-          alert("notification work 7");
-          console.log(data);
-          alert(dataString);
-          if (!useStore.user) {
-            alert("User not exist");
-          }
-          console.log(useStore.user);
           if (useStore.user) {
             readyToCheckoutApi(useStore.user.nic).then(resp => {
               if (resp.status === SUCCESS) {
@@ -97,16 +80,16 @@ export default function HomeScreen() {
                   pathname: "/pages/checkout"
                 });
               } else {
-                alert(resp.message);
+                Alert.alert(resp.status,resp.message);
               }
             }).catch(error => {
               alert("Error 500");
-              Alert.alert("Check debug",JSON.stringify(response.notification.request.content));
-              alert("Error 500" + error.toString());
+              Alert.alert("Check debug",JSON.stringify(error));
             });
           }
         } catch (e) {
           alert("throw error");
+          Alert.alert("Check debug",JSON.stringify(e));
         }
 
 
