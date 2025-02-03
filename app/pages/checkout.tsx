@@ -59,6 +59,9 @@ const FundTransferScreen = () => {
     }
 
   }
+  useEffect(() => {
+    Alert.alert("data  detail USER EFFECT 2:  ",JSON.stringify(detail));
+  }, [detail]);
   const openBrowser = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
@@ -78,22 +81,22 @@ const FundTransferScreen = () => {
      </ThemedView>)
   }
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <Text style={styles.title}>Fund Transfer</Text>
-      <View style={styles.section}>
-        <Text style={styles.label}>From</Text>
+      <ThemedView style={styles.section}>
+        <ThemedText style={styles.label}>From</ThemedText>
         <RNPickerSelect
           value={detail.fromAccountList[0] || "no account"}
           onValueChange={(value) => setSelectedAccount(value)}
           items={bankList}
           placeholder={{label: "Select an option...", value: null}}
         />
-      </View>
+      </ThemedView>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>To Account</Text>
+      <ThemedView style={styles.section}>
+        <ThemedText style={styles.label}>To Account</ThemedText>
         <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} />
-      </View>
+      </ThemedView>
 
       <View style={styles.section}>
         <Text style={styles.label}>Amount</Text>
@@ -123,7 +126,7 @@ const FundTransferScreen = () => {
       <TouchableOpacity style={styles.button} onPress={processPayment}>
         <Text style={styles.buttonText}>Proceed to pay</Text>
       </TouchableOpacity>
-    </View>
+    </ThemedView>
   );
 };
 

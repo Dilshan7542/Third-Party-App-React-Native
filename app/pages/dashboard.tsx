@@ -1,4 +1,4 @@
-import {AppState, Image, Linking, Platform, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Alert, AppState, Image, Linking, Platform, StyleSheet, TouchableOpacity, View} from "react-native";
 import {ThemedView} from "@/components/ThemedView";
 import {Link, useLocalSearchParams, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
@@ -6,13 +6,16 @@ import {IUser, startSession} from "@/service/user-service";
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppHeader from "@/components/header/header";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/Store";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "@/store/Store";
 import {openBrowserAsync} from "expo-web-browser";
+import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
+import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 
 
 export default function DashBoard() {
   const navigation = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const [nic, setNic] = useState("");
   const [name, setName] = useState("")
   const userState = useSelector((store:RootState)=> store.user);
@@ -51,7 +54,21 @@ export default function DashBoard() {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err))
     });
   };
-
+const test=()=>{
+  const trans: CheckoutTransaction = {
+    date: new Date().toISOString(),
+    accountName: "Dilshan",
+    fromAccountList: ["10","20"],
+    toAccount: "545456456454",
+    amount:  1000000,
+    ref: "ref65454654654"
+  }
+  Alert.alert("Build Trans",JSON.stringify(trans));
+  dispatch(readyToCheckout(trans))
+  navigation.push({
+    pathname: "/pages/checkout"
+  });
+}
   return (<ThemedView style={{flex:1}}>
   <AppHeader name={name}></AppHeader>
     <ThemedView style={{...styles.flexCenter, justifyContent: "center", alignItems: "center",minHeight:"50%"}}>
@@ -64,15 +81,13 @@ export default function DashBoard() {
   <ThemedText>DLB App</ThemedText>
   </ThemedView>
   </TouchableOpacity>
-  <TouchableOpacity style={styles.cartItem}>
-  <Link href={{pathname: "/pages/frame-view", params: {url: "https://www.google.com/", nic: nic}}}>
+  <TouchableOpacity style={styles.cartItem} onPress={test}>
   <ThemedView style={styles.cartChildItem}>
   <Image
     source={require("../../assets/images/nlb.png")}
   style={styles.cartImage}/>
   <ThemedText>NLB Apps</ThemedText>
   </ThemedView>
-  </Link>
   </TouchableOpacity>
   <TouchableOpacity style={styles.cartItem}>
   <Link href={{pathname: "/pages/frame-view", params: {url: "https://www.google.com/"}}}>
