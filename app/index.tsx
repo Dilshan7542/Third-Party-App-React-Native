@@ -40,7 +40,9 @@ export default function HomeScreen() {
         const data = JSON.parse(dataString.body);
         console.log(data);
         alert(dataString);
-        alert("amount :"+data.amount+" | ref : "+data.refNumber);
+        if(!useStore.user){
+          alert("User not exist");
+        }
           console.log(useStore.user);
         if (useStore.user) {
             readyToCheckoutApi(useStore.user.nic).then(resp=>{
