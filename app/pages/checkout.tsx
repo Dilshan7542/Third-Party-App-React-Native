@@ -7,6 +7,7 @@ import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
+import {ThemedView} from "@/components/ThemedView";
 
 interface LabelAccount {
   label: string,
@@ -20,17 +21,26 @@ const FundTransferScreen = () => {
   const [bankList, setBankList] = useState<LabelAccount[]>([])
   const [detail, setDetail] = useState<CheckoutTransaction | undefined>();
   useEffect(() => {
-    const data = checkoutStore.data;
-    console.log(data);
-    Alert.alert("checkout data :  ",JSON.stringify(data));
-    if (data) {
-      const labelAccount: LabelAccount[] = [];
-      data.fromAccountList.map(m => {
-        labelAccount.push({label: m, value: m});
-      });
-      setBankList(labelAccount);
-      setDetail(data);
+    try {
+      const data = checkoutStore.data;
+      Alert.alert("checkout data :  ",JSON.stringify(data));
+      if (data) {
+        const labelAccount: LabelAccount[] = [];
+        data.fromAccountList.map(m => {
+          labelAccount.push({label: m, value: m});
+        });
+        setBankList(labelAccount);
+        setDetail(data);
+        if(detail){
+        Alert.alert("data  detail:  ",JSON.stringify(detail));
+        }else{
+          alert("detail not found yet!")
+        }
+      }
+    }catch (e){
+      Alert.alert("Error :  ",JSON.stringify(e));
     }
+
   }, []);
   const processPayment=()=>{
     if(useStore.user && detail){
@@ -53,7 +63,19 @@ const FundTransferScreen = () => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
   if(!detail){
-   return (<ThemedText><ThemedText>Test</ThemedText></ThemedText>)
+   return (
+     <ThemedView>
+       <ThemedText>Test</ThemedText>
+       <TouchableOpacity style={styles.button} onPress={()=>{
+         if(detail){
+         Alert.alert("checkout data :  ",JSON.stringify(detail));
+         }else{
+           alert("Detail undefined");
+         }
+       }}>
+         <Text style={styles.buttonText}>Test</Text>
+       </TouchableOpacity>
+     </ThemedView>)
   }
   return (
     <View style={styles.container}>
