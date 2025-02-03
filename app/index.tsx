@@ -36,15 +36,20 @@ export default function HomeScreen() {
         setNotification(notification);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-        const dataString = response.notification.request.content.data;
-        const data = JSON.parse(dataString.body);
-        console.log(data);
-        alert(dataString);
-        if(!useStore.user){
-          alert("User not exist");
-        }
+        alert("notification work 2");
+        try {
+        alert("notification work 3");
+          const dataString = response.notification.request.content.data;
+        alert("notification work 4");
+          const data = JSON.parse(dataString.body);
+        alert("notification work 5");
+          console.log(data);
+          alert(dataString);
+          if(!useStore.user){
+            alert("User not exist");
+          }
           console.log(useStore.user);
-        if (useStore.user) {
+          if (useStore.user) {
             readyToCheckoutApi(useStore.user.nic).then(resp=>{
               if (resp.status === SUCCESS) {
                 const content = resp.content;
@@ -71,6 +76,10 @@ export default function HomeScreen() {
               alert("Error 500");
             });
           }
+        }catch (e){
+          alert("throw error");
+        }
+
 
       });
 
