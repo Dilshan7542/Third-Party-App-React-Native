@@ -14,7 +14,7 @@ interface LabelAccount {
   value: string
 }
 
-const TestScreen = () => {
+const Test2Screen = () => {
   const useStore = useSelector((store: RootState) => store.user);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
@@ -166,4 +166,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TestScreen;
+export default Test2Screen;

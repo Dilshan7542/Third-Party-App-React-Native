@@ -35,13 +35,16 @@ export default function RootLayout() {
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
             {/*        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />*/}
+            <Stack.Screen name="+not-found"/>
             <Stack.Screen name="index" options={{title: "Start ABCD App"}} key={"index"}/>
             <Stack.Screen name="pages/frame-view" options={{title: "Web view"}} key={"frame-view"} />
             <Stack.Screen name="pages/login" options={{title: "Login Our App"}} key={"login"}/>
             <Stack.Screen name="pages/[id]" options={{headerShown: false}} key={"id"}/>
             <Stack.Screen name="pages/dashboard" options={{headerShown: false}} key={"dashboard"}/>
             <Stack.Screen name="pages/checkout" options={{title: "Checkout Payment"}}/>
-            <Stack.Screen name="+not-found"/>
+            <Stack.Screen name="pages/test" options={{title: "Checkout Payment"}}/>
+            <Stack.Screen name="pages/test2" options={{title: "Checkout Payment"}}/>
+            <Stack.Screen name="pages/test3" options={{title: "Checkout Payment"}}/>
           </Stack>
           <StatusBar style="auto"/>
         </ThemeProvider>

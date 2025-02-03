@@ -23,7 +23,6 @@ const FundTransferScreen = () => {
   useEffect(() => {
     try {
       const data = checkoutStore.data;
-      Alert.alert("checkout data :  ",JSON.stringify(data));
       if (data) {
         const labelAccount: LabelAccount[] = [];
         data.fromAccountList.map(m => {
@@ -31,11 +30,6 @@ const FundTransferScreen = () => {
         });
         setBankList(labelAccount);
         setDetail(data);
-        if(detail){
-        Alert.alert("data  detail:  ",JSON.stringify(detail));
-        }else{
-          alert("detail not found yet!")
-        }
       }
     }catch (e){
       Alert.alert("Error :  ",JSON.stringify(e));

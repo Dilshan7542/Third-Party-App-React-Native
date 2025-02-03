@@ -14,7 +14,7 @@ interface LabelAccount {
   value: string
 }
 
-const TestScreen = () => {
+const Test3Screen = () => {
   const useStore = useSelector((store: RootState) => store.user);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
@@ -59,56 +59,8 @@ const TestScreen = () => {
   const openBrowser = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
-  if(!detail){
-    return (
-      <ThemedView>
-        <ThemedText>Test</ThemedText>
-        <TouchableOpacity style={styles.button} onPress={()=>{
-          if(detail){
-            Alert.alert("checkout data :  ",JSON.stringify(detail));
-          }else{
-            alert("Detail undefined");
-          }
-        }}>
-          <Text style={styles.buttonText}>Test</Text>
-        </TouchableOpacity>
-      </ThemedView>)
-  }
   return (
     <ThemedView style={styles.container}>
-      <Text style={styles.title}>Fund Transfer</Text>
-      <ThemedView style={styles.section}>
-        <ThemedText style={styles.label}>From</ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.section}>
-        <ThemedText style={styles.label}>To Account</ThemedText>
-        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} />
-      </ThemedView>
-
-      <View style={styles.section}>
-        <Text style={styles.label}>Amount</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="LKR Enter amount"
-          keyboardType="numeric"
-          value={detail.amount.toString()}
-        />
-        {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Date</Text>
-        <Text style={styles.value}>{detail.date}</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Receiver's Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter beneficiary reference"
-          value={detail.accountName}
-        />
-      </View>
-
       <TouchableOpacity style={styles.button} onPress={processPayment}>
         <Text style={styles.buttonText}>Proceed to pay</Text>
       </TouchableOpacity>
@@ -166,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TestScreen;
+export default Test3Screen;

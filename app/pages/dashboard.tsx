@@ -67,11 +67,15 @@ const test=(status:number)=>{
   dispatch(readyToCheckout(trans))
   if(status===1){
     navigation.push({
-      pathname: "/pages/checkout"
+      pathname: "/pages/test"
     });
-  }else {
+  }else if(status==2){
     navigation.push({
-      pathname: "/pages/checkout"
+      pathname: "/pages/test2"
+    });
+  }else if(status ==3){
+    navigation.push({
+      pathname: "/pages/test3"
     });
   }
 
@@ -148,6 +152,33 @@ const test=(status:number)=>{
   </ThemedView>
     </Link>
   </TouchableOpacity>
+
+    <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
+      <ThemedView style={styles.cartChildItem}>
+        <Image
+          source={require("../../assets/images/nlb.png")}
+          style={styles.cartImage}/>
+        <ThemedText>Test 01</ThemedText>
+      </ThemedView>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.cartItem} onPress={()=>{test(2)}}>
+      <ThemedView style={styles.cartChildItem}>
+        <Image
+          source={require("../../assets/images/nlb.png")}
+          style={styles.cartImage}/>
+        <ThemedText>Test 02</ThemedText>
+      </ThemedView>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.cartItem} onPress={()=>{test(3)}}>
+      <ThemedView style={styles.cartChildItem}>
+        <Image
+          source={require("../../assets/images/nlb.png")}
+          style={styles.cartImage}/>
+        <ThemedText>Test 03</ThemedText>
+      </ThemedView>
+    </TouchableOpacity>
+
+
   </ThemedView>
   </ThemedView>
 
