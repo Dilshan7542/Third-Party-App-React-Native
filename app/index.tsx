@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, Platform, StyleSheet, Text, TouchableOpacity, View, Alert} from "react-native";
 import {useRouter} from "expo-router";
 import * as Notifications from 'expo-notifications';
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
@@ -11,7 +11,6 @@ import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 import {readyToCheckoutApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
-import {userReducer} from "@/store/user/UserReducer";
 
 export default function HomeScreen() {
   const useStore = useSelector((store: RootState) => store.user);
@@ -36,47 +35,77 @@ export default function HomeScreen() {
         setNotification(notification);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-        alert("notification work 2");
+        Alert.alert("notification work 2",JSON.stringify(response.notification));
         try {
-        alert("notification work 3");
-          const dataString = response.notification.request.content.data;
-        alert("notification work 4");
-          const data = JSON.parse(dataString.body);
-        alert("notification work 5");
+          alert("notification work 3");
+          let dataString:any;
+          try {
+            dataString=response.notification.request.content.data;
+          }catch (e){
+            alert("Second chatch occur");
+          }
+         const test= JSON.stringify(dataString);
+          alert(test);
+         Alert.alert("Check debug",test);
+          alert("notification work 4");
+          let data: any;
+
+          if (dataString) {
+            try {
+            Alert.alert("data sting",JSON.stringify(dataString));
+            }catch (e){
+              alert("data string error");
+            }
+            if (dataString.body) {
+              data = JSON.parse(dataString.body);
+              alert("notification work 52");
+            } else {
+              data.amount = 6000000;
+              data.refNumber = "TestDemoRef 2";
+              alert("notification work 5");
+            }
+          } else {
+            data.amount = 5000000;
+            data.refNumber = "TestDemoRef";
+            alert("notification work 6");
+          }
+          alert("notification work 7");
           console.log(data);
           alert(dataString);
-          if(!useStore.user){
+          if (!useStore.user) {
             alert("User not exist");
           }
           console.log(useStore.user);
           if (useStore.user) {
-            readyToCheckoutApi(useStore.user.nic).then(resp=>{
+            readyToCheckoutApi(useStore.user.nic).then(resp => {
               if (resp.status === SUCCESS) {
                 const content = resp.content;
-                console.log("response content ",resp.content)
+                console.log("response content ", resp.content)
                 const newDate = new Date();
-                const date=newDate.toISOString().split("T")[0]+"  "+newDate.getHours()+":"+newDate.getMinutes()+":"+newDate.getMilliseconds();
-                const trans:CheckoutTransaction={
-                  date:date,
-                  accountName:content.toAccountName,
-                  fromAccountList:content.fromAccountList,
-                  toAccount:content.toAccount,
-                  amount:data.amount || 1000000,
-                  ref:data.refNumber
+                const date = newDate.toISOString().split("T")[0] + "  " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getMilliseconds();
+                const trans: CheckoutTransaction = {
+                  date: date,
+                  accountName: content.toAccountName,
+                  fromAccountList: content.fromAccountList,
+                  toAccount: content.toAccount,
+                  amount: data.amount || 1000000,
+                  ref: data.refNumber
                 }
-                console.log("\n\n\nbuild trans :",trans)
+                console.log("\n\n\nbuild trans :", trans)
                 dispatch(readyToCheckout(trans))
                 navigation.push({
                   pathname: "/pages/checkout"
                 });
-              }else{
+              } else {
                 alert(resp.message);
               }
-            }).catch(error=>{
+            }).catch(error => {
               alert("Error 500");
+              Alert.alert("Check debug",JSON.stringify(response.notification.request.content));
+              alert("Error 500" + error.toString());
             });
           }
-        }catch (e){
+        } catch (e) {
           alert("throw error");
         }
 
@@ -91,13 +120,15 @@ export default function HomeScreen() {
     isUserLogged();
   }, []);
   useEffect(() => {
-    return ()=>{};
+    return () => {
+    };
   }, []);
+
   async function isUserLogged() {
     if (authStore.token) {
-      setTimeout(()=>{
-     navigation.navigate({pathname: "/pages/dashboard"});
-      },100)
+      setTimeout(() => {
+        navigation.navigate({pathname: "/pages/dashboard"});
+      }, 100)
     }
   }
 
