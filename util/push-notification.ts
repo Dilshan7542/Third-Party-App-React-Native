@@ -3,13 +3,7 @@ import {Platform} from "react-native";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
+
 
 export async function sendPushNotification(expoPushToken: string) {
   const message = {

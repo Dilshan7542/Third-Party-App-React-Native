@@ -102,6 +102,13 @@ export default function HomeScreen() {
   }
 
   function setUpNotification() {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
     registerForPushNotificationsAsync()
       .then(async pushID => {
         dispatch(setAuthPushId(pushID));
