@@ -14,7 +14,7 @@ interface LabelAccount {
   value: string
 }
 
-const FundTransferScreen = () => {
+const TestScreen = () => {
   const useStore = useSelector((store: RootState) => store.user);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
@@ -32,7 +32,7 @@ const FundTransferScreen = () => {
         setBankList(labelAccount);
         setDetail(data);
         if(detail){
-        Alert.alert("data  detail:  ",JSON.stringify(detail));
+          Alert.alert("data  detail:  ",JSON.stringify(detail));
         }else{
           alert("detail not found yet!")
         }
@@ -66,19 +66,19 @@ const FundTransferScreen = () => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
   if(!detail){
-   return (
-     <ThemedView>
-       <ThemedText>Test</ThemedText>
-       <TouchableOpacity style={styles.button} onPress={()=>{
-         if(detail){
-         Alert.alert("checkout data :  ",JSON.stringify(detail));
-         }else{
-           alert("Detail undefined");
-         }
-       }}>
-         <Text style={styles.buttonText}>Test</Text>
-       </TouchableOpacity>
-     </ThemedView>)
+    return (
+      <ThemedView>
+        <ThemedText>Test</ThemedText>
+        <TouchableOpacity style={styles.button} onPress={()=>{
+          if(detail){
+            Alert.alert("checkout data :  ",JSON.stringify(detail));
+          }else{
+            alert("Detail undefined");
+          }
+        }}>
+          <Text style={styles.buttonText}>Test</Text>
+        </TouchableOpacity>
+      </ThemedView>)
   }
   return (
     <ThemedView style={styles.container}>
@@ -95,7 +95,7 @@ const FundTransferScreen = () => {
 
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>To Account</ThemedText>
-        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} editable={false} />
+        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} />
       </ThemedView>
 
       <View style={styles.section}>
@@ -105,9 +105,8 @@ const FundTransferScreen = () => {
           placeholder="LKR Enter amount"
           keyboardType="numeric"
           value={detail.amount.toString()}
-         editable={false}
         />
-       {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
+        {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
       </View>
       <View style={styles.section}>
         <Text style={styles.label}>Date</Text>
@@ -119,7 +118,6 @@ const FundTransferScreen = () => {
           style={styles.input}
           placeholder="Enter beneficiary reference"
           value={detail.accountName}
-          editable={false}
         />
       </View>
 
@@ -180,4 +178,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FundTransferScreen;
+export default TestScreen;

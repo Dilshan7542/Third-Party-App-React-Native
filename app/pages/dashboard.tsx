@@ -54,7 +54,7 @@ export default function DashBoard() {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err))
     });
   };
-const test=()=>{
+const test=(status:number)=>{
   const trans: CheckoutTransaction = {
     date: new Date().toISOString(),
     accountName: "Dilshan",
@@ -65,9 +65,16 @@ const test=()=>{
   }
   Alert.alert("Build Trans",JSON.stringify(trans));
   dispatch(readyToCheckout(trans))
-  navigation.push({
-    pathname: "/pages/checkout"
-  });
+  if(status===1){
+    navigation.push({
+      pathname: "/pages/checkout"
+    });
+  }else {
+    navigation.push({
+      pathname: "/pages/checkout"
+    });
+  }
+
 }
   return (<ThemedView style={{flex:1}}>
   <AppHeader name={name}></AppHeader>
@@ -81,7 +88,7 @@ const test=()=>{
   <ThemedText>DLB App</ThemedText>
   </ThemedView>
   </TouchableOpacity>
-  <TouchableOpacity style={styles.cartItem} onPress={test}>
+  <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
   <ThemedView style={styles.cartChildItem}>
   <Image
     source={require("../../assets/images/nlb.png")}
@@ -89,15 +96,14 @@ const test=()=>{
   <ThemedText>NLB Apps</ThemedText>
   </ThemedView>
   </TouchableOpacity>
-  <TouchableOpacity style={styles.cartItem}>
-  <Link href={{pathname: "/pages/frame-view", params: {url: "https://www.google.com/"}}}>
+    <TouchableOpacity style={styles.cartItem} onPress={()=>{test(0)}}>
   <ThemedView style={styles.cartChildItem}>
   <Image
     source={require("../../assets/images/damro.png")}
   style={styles.cartImage}/>
   <ThemedText>Damro App</ThemedText>
   </ThemedView>
-  </Link>
+
   </TouchableOpacity>
   <TouchableOpacity style={styles.cartItem}>
   <ThemedView style={styles.cartChildItem}>
