@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Linking, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Alert, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/Store";
 import RNPickerSelect from "react-native-picker-select";
@@ -22,6 +22,7 @@ const FundTransferScreen = () => {
   useEffect(() => {
     const data = checkoutStore.data;
     console.log(data);
+    Alert.alert("checkout data :  ",JSON.stringify(data));
     if (data) {
       const labelAccount: LabelAccount[] = [];
       data.fromAccountList.map(m => {
