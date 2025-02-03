@@ -5,7 +5,7 @@ import * as Notifications from 'expo-notifications';
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
 import {useDispatch, useSelector} from "react-redux";
 
-import {AppDispatch, RootState} from "@/store/Store";
+import {AppDispatch, RootState, store} from "@/store/Store";
 import {setAuthPushId} from "@/store/auth/AuthAction";
 import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 import {readyToCheckoutApi} from "@/service/client-service";
@@ -13,7 +13,6 @@ import {SUCCESS} from "@/constants/ResponseCode";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 
 export default function HomeScreen() {
-  const useStore = useSelector((store: RootState) => store.user);
   const authStore = useSelector((store: RootState) => store.auth);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +36,7 @@ export default function HomeScreen() {
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         Alert.alert("notification work 2",JSON.stringify(response.notification));
           let dataString=response.notification.request.content.data;
+        let stateUser = store.getState().user;
         try {
           let data: any;
           if(typeof dataString ==="string"){
@@ -47,46 +47,48 @@ export default function HomeScreen() {
               Alert.alert("error dataString",JSON.stringify(e));
             }
           }else{
-            alert("2");
             data=dataString;
+            alert("ref number : "+dataString.refNumber);
           }
-          if(useStore){
-            if(useStore.user){
-          Alert.alert("User Store",JSON.stringify(useStore.user));
+          if(stateUser){
+            if(stateUser.user){
+          Alert.alert("User Store",JSON.stringify(stateUser.user));
             }else{
               alert("user dont have");
             }
-          }else{
-            alert("store dont have")
-          }
-          if (useStore.user) {
-            readyToCheckoutApi(useStore.user.nic).then(resp => {
-              if (resp.status === SUCCESS) {
-                const content = resp.content;
-                console.log("response content ", resp.content)
-                const newDate = new Date();
-                const date = newDate.toISOString().split("T")[0] + "  " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getMilliseconds();
-                const trans: CheckoutTransaction = {
-                  date: date,
-                  accountName: content.toAccountName,
-                  fromAccountList: content.fromAccountList,
-                  toAccount: content.toAccount,
-                  amount: data.amount || 1000000,
-                  ref: data.refNumber
+            if (stateUser.user) {
+              readyToCheckoutApi(stateUser.user.nic).then(resp => {
+                Alert.alert("Build Trans",JSON.stringify(resp));
+                if (resp.status === SUCCESS) {
+                  const content = resp.content;
+                  console.log("response content ", resp.content)
+                  const newDate = new Date();
+                  const date = newDate.toISOString().split("T")[0] + "  " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getMilliseconds();
+                  const trans: CheckoutTransaction = {
+                    date: date,
+                    accountName: content.toAccountName,
+                    fromAccountList: content.fromAccountList,
+                    toAccount: content.toAccount,
+                    amount: data.amount || 1000000,
+                    ref: data.refNumber
+                  }
+                  Alert.alert("Build Trans",JSON.stringify(trans));
+                  dispatch(readyToCheckout(trans))
+                  navigation.push({
+                    pathname: "/pages/checkout"
+                  });
+                } else {
+                  Alert.alert(resp.status,resp.message);
                 }
-                console.log("\n\n\nbuild trans :", trans)
-                dispatch(readyToCheckout(trans))
-                navigation.push({
-                  pathname: "/pages/checkout"
-                });
-              } else {
-                Alert.alert(resp.status,resp.message);
-              }
-            }).catch(error => {
-              alert("Error 500");
-              Alert.alert("Check debug",JSON.stringify(error));
-            });
+              }).catch(error => {
+                alert("Error 500");
+                Alert.alert("Check debug",JSON.stringify(error));
+              });
+            }
+          }else{
+            alert("store user undefined")
           }
+
         } catch (e) {
           alert("throw error");
           Alert.alert("Check debug",JSON.stringify(e));
