@@ -31,42 +31,42 @@ const Test2Screen = () => {
         setBankList(labelAccount);
         setDetail(data);
       }
-    }catch (e){
-      Alert.alert("Error :  ",JSON.stringify(e));
+    } catch (e) {
+      Alert.alert("Error :  ", JSON.stringify(e));
     }
 
   }, []);
-  const processPayment=()=>{
-    if(useStore.user && detail){
+  const processPayment = () => {
+    if (useStore.user && detail) {
       processPaymentApi({
-        nic:useStore.user.nic,
-        amount:detail.amount,
-        transactionRef:detail.ref
-      }).then(resp=>{
+        nic: useStore.user.nic,
+        amount: detail.amount,
+        transactionRef: detail.ref
+      }).then(resp => {
         console.log(resp);
         if (resp.status === SUCCESS) {
           openBrowser(resp.content.webUrl);
         }
-      }).catch(e=>{
+      }).catch(e => {
         console.error(e);
       });
     }
 
   }
   useEffect(() => {
-    Alert.alert("data  detail USER EFFECT 2:  ",JSON.stringify(detail));
+    Alert.alert("data  detail USER EFFECT 2:  ", JSON.stringify(detail));
   }, [detail]);
   const openBrowser = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
-  if(!detail){
+  if (!detail) {
     return (
       <ThemedView>
         <ThemedText>Test</ThemedText>
-        <TouchableOpacity style={styles.button} onPress={()=>{
-          if(detail){
-            Alert.alert("checkout data :  ",JSON.stringify(detail));
-          }else{
+        <TouchableOpacity style={styles.button} onPress={() => {
+          if (detail) {
+            Alert.alert("checkout data :  ", JSON.stringify(detail));
+          } else {
             alert("Detail undefined");
           }
         }}>
@@ -83,7 +83,7 @@ const Test2Screen = () => {
 
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>To Account</ThemedText>
-        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} />
+        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount}/>
       </ThemedView>
 
       <View style={styles.section}>
