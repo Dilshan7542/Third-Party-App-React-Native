@@ -89,7 +89,7 @@ const FundTransferScreen = () => {
 
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>To Account</ThemedText>
-        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} editable={false} />
+        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount}   />
       </ThemedView>
 
       <View style={styles.section}>
@@ -99,7 +99,6 @@ const FundTransferScreen = () => {
           placeholder="LKR Enter amount"
           keyboardType="numeric"
           value={detail.amount.toString()}
-         editable={false}
         />
        {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
       </View>
@@ -113,7 +112,6 @@ const FundTransferScreen = () => {
           style={styles.input}
           placeholder="Enter beneficiary reference"
           value={detail.accountName}
-          editable={false}
         />
       </View>
 

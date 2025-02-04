@@ -63,6 +63,7 @@ const Test3Screen = () => {
     <ThemedView style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={processPayment}>
         <Text style={styles.buttonText}>Proceed to pay</Text>
+        <TextInput editable={false}/>
       </TouchableOpacity>
     </ThemedView>
   );
