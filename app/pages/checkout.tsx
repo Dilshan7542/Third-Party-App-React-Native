@@ -2,13 +2,13 @@ import React, {useEffect, useState} from "react";
 import {Alert, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/Store";
-
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {ThemedView} from "@/components/ThemedView";
-import {Picker} from "@react-native-picker/picker";
+
+import DropDownPicker from "react-native-dropdown-picker";
 
 
 interface LabelAccount {
@@ -22,6 +22,7 @@ const FundTransferScreen = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [bankList, setBankList] = useState<LabelAccount[]>([])
   const [detail, setDetail] = useState<CheckoutTransaction | undefined>();
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     try {
       const data = checkoutStore.data;
@@ -39,25 +40,29 @@ const FundTransferScreen = () => {
 
   }, []);
   const processPayment=()=>{
+    if (!useStore.user) {
+    Alert.alert("user not exist :  ",JSON.stringify(useStore));
+    }
+    if(!detail){
+    Alert.alert("detail not exist:  ",JSON.stringify(detail));
+    }
     if(useStore.user && detail){
       processPaymentApi({
         nic:useStore.user.nic,
         amount:detail.amount,
         transactionRef:detail.ref
       }).then(resp=>{
-        console.log(resp);
+        Alert.alert("response payment:  ",JSON.stringify(resp));
         if (resp.status === SUCCESS) {
           openBrowser(resp.content.webUrl);
         }
       }).catch(e=>{
         console.error(e);
+        Alert.alert("response payment failed:  ",JSON.stringify(e));
       });
     }
 
   }
-  useEffect(() => {
-    Alert.alert("data  detail USER EFFECT 2:  ",JSON.stringify(detail));
-  }, [detail]);
   const openBrowser = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
@@ -81,23 +86,22 @@ const FundTransferScreen = () => {
       <Text style={styles.title}>Fund Transfer</Text>
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>From</ThemedText>
-        <Picker
-          selectedValue={selectedAccount}
-          onValueChange={(itemValue) => setSelectedAccount(itemValue)}
-          style={ { height: 40, width: "100%" }}
-        >
-          {
-            bankList.map(m=>
-          <Picker.Item label={m.label} value={m.value} />
-            )
-
-          }
-        </Picker>
+        <DropDownPicker
+          open={open}
+          value={selectedAccount}
+          items={bankList}
+          setOpen={setOpen}
+          setValue={setSelectedAccount}
+          setItems={setBankList}
+          placeholder="Select an account"
+          style={styles.dropdown}
+          dropDownContainerStyle={styles.dropdownContainer}
+        />
       </ThemedView>
 
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>To Account</ThemedText>
-        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount}   />
+        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} editable={false}  />
       </ThemedView>
 
       <View style={styles.section}>
@@ -107,6 +111,7 @@ const FundTransferScreen = () => {
           placeholder="LKR Enter amount"
           keyboardType="numeric"
           value={detail.amount.toString()}
+          editable={false}
         />
        {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
       </View>
@@ -120,6 +125,7 @@ const FundTransferScreen = () => {
           style={styles.input}
           placeholder="Enter beneficiary reference"
           value={detail.accountName}
+          editable={false}
         />
       </View>
 
@@ -156,6 +162,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "gray",
   },
+  dropdown: { borderColor: "#ccc", borderWidth: 1, borderRadius: 8 },
+  dropdownContainer: { borderColor: "#ccc" },
   input: {
     height: 40,
     borderBottomWidth: 1,

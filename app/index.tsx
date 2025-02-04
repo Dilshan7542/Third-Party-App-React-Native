@@ -34,7 +34,6 @@ export default function HomeScreen() {
         setNotification(notification);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-        Alert.alert("notification work 2",JSON.stringify(response.notification));
           let dataString=response.notification.request.content.data;
         let stateUser = store.getState().user;
         try {
@@ -48,17 +47,10 @@ export default function HomeScreen() {
             }
           }else{
             data=dataString;
-            alert("ref number : "+dataString.refNumber);
           }
           if(stateUser){
-            if(stateUser.user){
-          Alert.alert("User Store",JSON.stringify(stateUser.user));
-            }else{
-              alert("user dont have");
-            }
             if (stateUser.user) {
               readyToCheckoutApi(stateUser.user.nic).then(resp => {
-                Alert.alert("Build Trans",JSON.stringify(resp));
                 if (resp.status === SUCCESS) {
                   const content = resp.content;
                   console.log("response content ", resp.content)
@@ -72,7 +64,7 @@ export default function HomeScreen() {
                     amount: data.amount || 1000000,
                     ref: data.refNumber
                   }
-                  Alert.alert("Build Trans",JSON.stringify(trans));
+                //  Alert.alert("Build Trans",JSON.stringify(trans));
                   dispatch(readyToCheckout(trans))
                   navigation.push({
                     pathname: "/pages/checkout"
