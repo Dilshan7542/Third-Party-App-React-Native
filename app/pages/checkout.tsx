@@ -2,12 +2,14 @@ import React, {useEffect, useState} from "react";
 import {Alert, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/Store";
-import RNPickerSelect from "react-native-picker-select";
+
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {ThemedView} from "@/components/ThemedView";
+import {Picker} from "@react-native-picker/picker";
+
 
 interface LabelAccount {
   label: string,
@@ -79,7 +81,18 @@ const FundTransferScreen = () => {
       <Text style={styles.title}>Fund Transfer</Text>
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>From</ThemedText>
+        <Picker
+          selectedValue={selectedAccount}
+          onValueChange={(itemValue) => setSelectedAccount(itemValue)}
+          style={ { height: 40, width: "100%" }}
+        >
+          {
+            bankList.map(m=>
+          <Picker.Item label={m.label} value={m.value} />
+            )
 
+          }
+        </Picker>
       </ThemedView>
 
       <ThemedView style={styles.section}>

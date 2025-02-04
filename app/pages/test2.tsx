@@ -111,10 +111,10 @@ const Test2Screen = () => {
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>From</ThemedText>
         <RNPickerSelect
-          value={bankList[0] && bankList[0]}
+          value={bankList[0]}
           onValueChange={(value) => setSelectedAccount(value)}
           items={bankList}
-          placeholder={{label: "Select an option...", value: null}}
+          placeholder={"Select Banck"}
         />
       </ThemedView>
       <TouchableOpacity style={styles.button} onPress={processPayment}>

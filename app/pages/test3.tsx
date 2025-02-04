@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Alert, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/Store";
-import RNPickerSelect from "react-native-picker-select";
+import DropDownPicker from "react-native-dropdown-picker";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
@@ -20,6 +20,7 @@ const Test3Screen = () => {
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [bankList, setBankList] = useState<LabelAccount[]>([])
   const [detail, setDetail] = useState<CheckoutTransaction | undefined>();
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     try {
       const data = checkoutStore.data;
@@ -65,6 +66,19 @@ const Test3Screen = () => {
         <Text style={styles.buttonText}>Proceed to pay</Text>
         <TextInput editable={false}/>
       </TouchableOpacity>
+      <View>
+        <DropDownPicker
+          open={open}
+          value={selectedAccount}
+          items={bankList}
+          setOpen={setOpen}
+          setValue={setSelectedAccount}
+          setItems={setBankList}
+          placeholder="Select an account"
+          style={styles.dropdown}
+          dropDownContainerStyle={styles.dropdownContainer}
+        />
+      </View>
     </ThemedView>
   );
 };
@@ -95,6 +109,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "gray",
   },
+  dropdown: { borderColor: "#ccc", borderWidth: 1, borderRadius: 8 },
+  dropdownContainer: { borderColor: "#ccc" },
   input: {
     height: 40,
     borderBottomWidth: 1,
