@@ -79,12 +79,7 @@ const FundTransferScreen = () => {
       <Text style={styles.title}>Fund Transfer</Text>
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>From</ThemedText>
-        <RNPickerSelect
-          value={detail.fromAccountList[0] || "no account"}
-          onValueChange={(value) => setSelectedAccount(value)}
-          items={bankList}
-          placeholder={{label: "Select an option...", value: null}}
-        />
+
       </ThemedView>
 
       <ThemedView style={styles.section}>

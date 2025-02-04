@@ -7,6 +7,7 @@ import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {ThemedView} from "@/components/ThemedView";
+import RNPickerSelect from "react-native-picker-select";
 
 interface LabelAccount {
   label: string,
@@ -79,7 +80,15 @@ const TestScreen = () => {
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>From</ThemedText>
       </ThemedView>
-
+      <ThemedView style={styles.section}>
+        <ThemedText style={styles.label}>From</ThemedText>
+        <RNPickerSelect
+          value={bankList[0] && bankList[0]}
+          onValueChange={(value) => setSelectedAccount(value)}
+          items={bankList}
+          placeholder={{label: "Select an option...", value: null}}
+        />
+      </ThemedView>
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>To Account</ThemedText>
         <TextInput style={styles.input} placeholder="To account" value={detail.toAccount}/>

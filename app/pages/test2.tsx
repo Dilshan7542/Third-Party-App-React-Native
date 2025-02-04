@@ -108,7 +108,15 @@ const Test2Screen = () => {
           value={detail.accountName}
         />
       </View>
-
+      <ThemedView style={styles.section}>
+        <ThemedText style={styles.label}>From</ThemedText>
+        <RNPickerSelect
+          value={bankList[0] && bankList[0]}
+          onValueChange={(value) => setSelectedAccount(value)}
+          items={bankList}
+          placeholder={{label: "Select an option...", value: null}}
+        />
+      </ThemedView>
       <TouchableOpacity style={styles.button} onPress={processPayment}>
         <Text style={styles.buttonText}>Proceed to pay</Text>
       </TouchableOpacity>
