@@ -38,6 +38,7 @@ export const userLogin=async (login:{
   "password": string
 })=>{
   const response = await apiClient.post<AppResponse<LoginResp>>("/third-party/user/login",login);
+  return response.data;
 }
 export const registerUser=async (register:RegisterReq)=>{
   const response = await apiClient.post<AppResponse<LoginResp>>("/third-party/user/register",register);

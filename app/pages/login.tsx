@@ -29,12 +29,16 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const navigation = useRouter();
   const handleLogin = () => {
+    console.log("click")
     if (!nic || !password) {
       Alert.alert("Error", "Please fill out all fields!");
     } else {
+      console.log(nic,password)
         dispatch(userLoginAsync({nic,password})).then(res=>{
+          console.log(res)
           navigation.push({pathname: "/pages/dashboard"});
         }).catch(error=>{
+          console.log(error)
          alert("Error 500")
         });
     }
