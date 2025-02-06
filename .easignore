@@ -1,0 +1,20 @@
+# Ignore node_modules (dependencies will be installed during the build process)
+node_modules/
+
+# Ignore local development files
+.expo/
+.expo-shared/
+.vscode/
+.idea/
+.DS_Store
+
+# Ignore unnecessary files
+*.log
+*.env
+*.bak
+*.tmp
+
+# Ignore large assets or unnecessary directories
+assets/
+dist/
+build/

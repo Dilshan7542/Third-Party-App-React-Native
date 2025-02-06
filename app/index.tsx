@@ -64,7 +64,7 @@ export default function HomeScreen() {
                     amount: data.amount || 1000000,
                     ref: data.refNumber
                   }
-                //  Alert.alert("Build Trans",JSON.stringify(trans));
+                  Alert.alert("Build Trans",JSON.stringify(trans));
                   dispatch(readyToCheckout(trans))
                   navigation.push({
                     pathname: "/pages/checkout"
