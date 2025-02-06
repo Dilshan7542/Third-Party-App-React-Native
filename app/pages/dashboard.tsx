@@ -153,7 +153,7 @@ const test=(status:number)=>{
     </Link>
   </TouchableOpacity>
 
-    <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
+   {/* <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
       <ThemedView style={styles.cartChildItem}>
         <Image
           source={require("../../assets/images/nlb.png")}
@@ -176,7 +176,7 @@ const test=(status:number)=>{
           style={styles.cartImage}/>
         <ThemedText>Test 03</ThemedText>
       </ThemedView>
-    </TouchableOpacity>
+    </TouchableOpacity>*/}
 
 
   </ThemedView>

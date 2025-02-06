@@ -19,6 +19,7 @@ interface LabelAccount {
 const FundTransferScreen = () => {
   const useStore = useSelector((store: RootState) => store.user);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
+  const [isClick, setIsClick] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [bankList, setBankList] = useState<LabelAccount[]>([])
   const [detail, setDetail] = useState<CheckoutTransaction | undefined>();
@@ -47,6 +48,7 @@ const FundTransferScreen = () => {
     Alert.alert("detail not exist:  ",JSON.stringify(detail));
     }
     if(useStore.user && detail){
+      setIsClick(true);
       processPaymentApi({
         nic:useStore.user.nic,
         amount:detail.amount,
@@ -55,9 +57,12 @@ const FundTransferScreen = () => {
         Alert.alert("response payment:  ",JSON.stringify(resp));
         if (resp.status === SUCCESS) {
           openBrowser(resp.content.webUrl);
+        }else{
+          setIsClick(false);
         }
       }).catch(e=>{
         console.error(e);
+        setIsClick(false);
         Alert.alert("response payment failed:  ",JSON.stringify(e));
       });
     }
@@ -129,7 +134,7 @@ const FundTransferScreen = () => {
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={processPayment}>
+      <TouchableOpacity style={styles.button} disabled={isClick}  onPress={processPayment}>
         <Text style={styles.buttonText}>Proceed to pay</Text>
       </TouchableOpacity>
     </ThemedView>

@@ -19,6 +19,7 @@
       "package": "com.anonymous.dlbapp",
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
+
     },
     "web": {
       "bundler": "metro",

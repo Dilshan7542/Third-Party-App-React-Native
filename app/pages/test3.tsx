@@ -4,7 +4,6 @@ import {useSelector} from "react-redux";
 import {RootState} from "@/store/Store";
 import DropDownPicker from "react-native-dropdown-picker";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
-import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {ThemedView} from "@/components/ThemedView";
@@ -32,36 +31,33 @@ const Test3Screen = () => {
         setBankList(labelAccount);
         setDetail(data);
       }
-    }catch (e){
-      Alert.alert("Error :  ",JSON.stringify(e));
+    } catch (e) {
+      Alert.alert("Error :  ", JSON.stringify(e));
     }
 
   }, []);
-  const processPayment=()=>{
-    if(useStore.user && detail){
+  const processPayment = () => {
+    if (useStore.user && detail) {
       processPaymentApi({
-        nic:useStore.user.nic,
-        amount:detail.amount,
-        transactionRef:detail.ref
-      }).then(resp=>{
+        nic: useStore.user.nic, amount: detail.amount, transactionRef: detail.ref
+      }).then(resp => {
         console.log(resp);
         if (resp.status === SUCCESS) {
           openBrowser(resp.content.webUrl);
         }
-      }).catch(e=>{
+      }).catch(e => {
         console.error(e);
       });
     }
 
   }
   useEffect(() => {
-    Alert.alert("data  detail USER EFFECT 2:  ",JSON.stringify(detail));
+    Alert.alert("data  detail USER EFFECT 2:  ", JSON.stringify(detail));
   }, [detail]);
   const openBrowser = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
-  return (
-    <ThemedView style={styles.container}>
+  return (<ThemedView style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={processPayment}>
         <Text style={styles.buttonText}>Proceed to pay</Text>
         <TextInput editable={false}/>
@@ -79,59 +75,41 @@ const Test3Screen = () => {
           dropDownContainerStyle={styles.dropdownContainer}
         />
       </View>
-    </ThemedView>
-  );
+    </ThemedView>);
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
+    flex: 1, padding: 20, backgroundColor: "#fff",
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 20, fontWeight: "bold", marginBottom: 20,
   },
   section: {
     marginBottom: 15,
   },
   label: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 14, fontWeight: "600",
   },
   value: {
-    fontSize: 16,
-    color: "#000",
+    fontSize: 16, color: "#000",
   },
   subText: {
-    fontSize: 12,
-    color: "gray",
+    fontSize: 12, color: "gray",
   },
-  dropdown: { borderColor: "#ccc", borderWidth: 1, borderRadius: 8 },
-  dropdownContainer: { borderColor: "#ccc" },
+  dropdown: {borderColor: "#ccc", borderWidth: 1, borderRadius: 8},
+  dropdownContainer: {borderColor: "#ccc"},
   input: {
-    height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    fontSize: 16,
-    paddingVertical: 5,
+    height: 40, borderBottomWidth: 1, borderBottomColor: "#ccc", fontSize: 16, paddingVertical: 5,
   },
   picker: {
     height: 40,
   },
   button: {
-    backgroundColor: "red",
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-    marginTop: 20,
+    backgroundColor: "red", padding: 15, borderRadius: 5, alignItems: "center", marginTop: 20,
   },
   buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+    color: "#fff", fontSize: 16, fontWeight: "bold",
   },
 });
 

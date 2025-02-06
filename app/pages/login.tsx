@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {Alert, Button, StyleSheet, TextInput} from "react-native";
+import {Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useRouter} from "expo-router";
+import {Link, useLocalSearchParams, useRouter} from "expo-router";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 import {useSelector,useDispatch} from "react-redux";
@@ -9,6 +9,8 @@ import {AppDispatch, RootState} from "@/store/Store";
 import {userLoginAsync} from "@/store/user/UserAction";
 
 const LoginScreen = () => {
+  const params = useLocalSearchParams();
+  const nicPram: string = params['nic']?.toString();
   const useStore = useSelector((store:RootState)=> store.user);
   const tokenStore = useSelector((store:RootState)=> store.auth);
   const dispatch = useDispatch<AppDispatch>();
@@ -22,7 +24,8 @@ const LoginScreen = () => {
       await AsyncStorage.clear();
     }
   }
-  const [nic, setNic] = useState("");
+
+  const [nic, setNic] = useState(nicPram ? nicPram:"");
   const [password, setPassword] = useState("");
   const navigation = useRouter();
   const handleLogin = () => {
@@ -52,13 +55,20 @@ const LoginScreen = () => {
       onChangeText={setPassword}
       secureTextEntry
     />
-    <Button title="Login" onPress={handleLogin}/>
+    <ThemedView style={{display:"flex",justifyContent:"space-between",width:"100%",gap:10}}>
+      <TouchableOpacity style={styles.buttonLogin} onPress={handleLogin}>
+        <ThemedText lightColor={"white"} darkColor={"black"} style={styles.buttonText}>Login</ThemedText>
+      </TouchableOpacity>
+      <Link href={"/pages/register"} style={styles.buttonRegister}>
+        <ThemedText style={styles.buttonText}>Register</ThemedText>
+      </Link>
+    </ThemedView>
   </ThemedView>);
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#f5f5f5", padding: 20,
+    flex: 1, justifyContent: "center", alignItems: "center", padding: 20,
   }, title: {
     fontSize: 24, fontWeight: "bold", marginBottom: 20,
   }, input: {
@@ -71,6 +81,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
   },
+  buttonText:{
+fontWeight:"bold",textAlign:"center"
+  },
+  buttonLogin: {
+    backgroundColor: '#00a4fd',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  buttonRegister:{
+    backgroundColor:"rgba(225,222,222,0.32)",
+    display:"flex",flexDirection:"row",justifyContent:"center",padding:10
+  }
 });
 
 export default LoginScreen;

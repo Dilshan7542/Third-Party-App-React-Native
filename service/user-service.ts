@@ -10,6 +10,14 @@ export interface LoginResp{
   name:string,
   nic:string
 }
+export interface RegisterReq {
+  nic: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  mobileNumber: string;
+  password: string;
+}
 export const getAllUsers = async () => {
   try {
     const response = await apiClient.get<AppResponse<IUser[]>>("/third-party/user");
@@ -30,5 +38,8 @@ export const userLogin=async (login:{
   "password": string
 })=>{
   const response = await apiClient.post<AppResponse<LoginResp>>("/third-party/user/login",login);
+}
+export const registerUser=async (register:RegisterReq)=>{
+  const response = await apiClient.post<AppResponse<LoginResp>>("/third-party/user/register",register);
 return response.data
 }

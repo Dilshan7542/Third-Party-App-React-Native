@@ -73,8 +73,7 @@ export default function HomeScreen() {
                   Alert.alert(resp.status,resp.message);
                 }
               }).catch(error => {
-                alert("Error 500");
-                Alert.alert("Check debug",JSON.stringify(error));
+                Alert.alert("Error 500",JSON.stringify(error));
               });
             }
           }else{
@@ -82,11 +81,8 @@ export default function HomeScreen() {
           }
 
         } catch (e) {
-          alert("throw error");
-          Alert.alert("Check debug",JSON.stringify(e));
+          Alert.alert("Wrap Notification Error",JSON.stringify(e));
         }
-
-
       });
 
       return () => {
