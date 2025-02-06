@@ -6,7 +6,8 @@ import * as yup from 'yup';
 import {RegisterReq, registerUser} from "@/service/user-service";
 import {ThemedView} from "@/components/ThemedView";
 import {useNavigation} from "@react-navigation/native";
-import {Link, useRouter} from "expo-router";
+import
+{Link, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
 
 // Validation schema
