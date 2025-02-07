@@ -11,7 +11,8 @@ export type AppError = {
 }
 const persistConfig = {
   key: "root", // Key for storage
-  storage: AsyncStorage, // Use AsyncStorage for React Native
+  storage: AsyncStorage,
+  whitelist: ["user", "auth"],
 };
 const rootReducer = combineReducers({
   user: userReducer,
