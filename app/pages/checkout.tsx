@@ -113,7 +113,6 @@ const FundTransferScreen = () => {
         <Text style={styles.label}>Amount</Text>
         <TextInput
           style={styles.input}
-          placeholder="LKR Enter amount"
           keyboardType="numeric"
           value={detail.amount.toString()}
           editable={false}
@@ -128,11 +127,19 @@ const FundTransferScreen = () => {
         <Text style={styles.label}>Receiver's Name</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter beneficiary reference"
           value={detail.accountName}
           editable={false}
         />
       </View>
+      <View style={styles.section}>
+        <Text style={styles.label}>Ref Number</Text>
+        <TextInput
+          style={styles.input}
+          value={detail.ref}
+          editable={false}
+        />
+      </View>
+
 
       <TouchableOpacity style={styles.button} disabled={isClick}  onPress={processPayment}>
         <Text style={styles.buttonText}>Proceed to pay</Text>

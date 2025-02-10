@@ -12,8 +12,8 @@ export interface LoginResp{
 }
 export interface RegisterReq {
   nic: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   mobileNumber: string;
   password: string;

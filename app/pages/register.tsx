@@ -11,8 +11,8 @@ import {ThemedText} from "@/components/ThemedText";
 // Validation schema
 const schema = yup.object().shape({
   nic: yup.string().required('NIC is required'),
-  firstname: yup.string().required('First Name is required'),
-  lastname: yup.string().required('Last Name is required'),
+  firstName: yup.string().required('First Name is required'),
+  lastName: yup.string().required('Last Name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   mobileNumber: yup.string().required('Mobile Number is required'),
   password: yup.string().min(4, 'Password must be at least 4 characters').required('Password is required'),
@@ -29,7 +29,9 @@ export default function Register() {
     Alert.alert('Registration Successful', JSON.stringify(resp));
     navigation.navigate({pathname:"/pages/login",params:{nic:data.nic}});
     }).catch(e=>{
-    Alert.alert('Registration Failed', JSON.stringify(e));
+      const error = JSON.stringify(e);
+      console.log(error);
+    Alert.alert('Registration Failed', error);
     navigation.navigate({pathname:"/pages/login",params:{nic:data.nic}});
     })
   };
@@ -64,10 +66,10 @@ export default function Register() {
             value={value}
           />
         )}
-        name="firstname"
+        name="firstName"
         defaultValue=""
       />
-      {errors.firstname && <Text style={styles.errorText}>{errors.firstname.message}</Text>}
+      {errors.firstName && <Text style={styles.errorText}>{errors.firstName.message}</Text>}
 
       <Controller
         control={control}
@@ -80,10 +82,10 @@ export default function Register() {
             value={value}
           />
         )}
-        name="lastname"
+        name="lastName"
         defaultValue=""
       />
-      {errors.lastname && <Text style={styles.errorText}>{errors.lastname.message}</Text>}
+      {errors.lastName && <Text style={styles.errorText}>{errors.lastName.message}</Text>}
 
       <Controller
         control={control}

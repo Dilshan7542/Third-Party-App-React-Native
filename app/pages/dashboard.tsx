@@ -16,8 +16,7 @@ import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 export default function DashBoard() {
   const navigation = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const [nic, setNic] = useState("");
-  const [name, setName] = useState("")
+  const [user, setUser] = useState<IUser | undefined>(undefined);
   const userState = useSelector((store:RootState)=> store.user);
   const authState = useSelector((store:RootState)=> store.auth);
   useEffect(() => {
@@ -29,8 +28,7 @@ export default function DashBoard() {
     navigation.push({pathname: "/pages/login"});
     }else{
       if(userState.user){
-        setNic(userState.user.nic);
-        setName(userState.user.name);
+      setUser(userState.user);
       }
     }
   }
@@ -39,7 +37,7 @@ export default function DashBoard() {
     let pushId = authState.pushId;
     pushId=pushId ? pushId:"ExponentPushToken[a41kKlNuhfjA4csFLLu586]";
     console.log(pushId);
-    if (pushId && userState.user) startSession(userState.user.nic, pushId).then(resp => {
+    if (pushId && user) startSession(user.nic, pushId).then(resp => {
       console.log(resp);
       let url = resp.content.url;
       openBrowser(url);
@@ -65,7 +63,7 @@ const test=(status:number)=>{
   }
   Alert.alert("Build Trans",JSON.stringify(trans));
   dispatch(readyToCheckout(trans))
-  if(status===1){
+ /* if(status===1){
     navigation.push({
       pathname: "/pages/test"
     });
@@ -77,11 +75,11 @@ const test=(status:number)=>{
     navigation.push({
       pathname: "/pages/test3"
     });
-  }
+  }*/
 
 }
   return (<ThemedView style={{flex:1}}>
-  <AppHeader name={name}></AppHeader>
+  <AppHeader user={user}></AppHeader>
     <ThemedView style={{...styles.flexCenter, justifyContent: "center", alignItems: "center",minHeight:"50%"}}>
   <ThemedView style={{display: "flex", width: '100%', flexDirection: "row", padding: 5, flexWrap: "wrap"}}>
   <TouchableOpacity style={styles.cartItem} onPress={redirect}>

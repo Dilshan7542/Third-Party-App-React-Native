@@ -11,6 +11,7 @@ import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 import {readyToCheckoutApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomeScreen() {
   const authStore = useSelector((store: RootState) => store.auth);
@@ -115,7 +116,10 @@ export default function HomeScreen() {
     });
     registerForPushNotificationsAsync()
       .then(async pushID => {
+        if(pushID){
+        await AsyncStorage.setItem("app-push",pushID)
         dispatch(setAuthPushId(pushID));
+        }
         setExpoPushToken(pushID ?? '')
       })
       .catch((error: any) => setExpoPushToken(`${error}`));

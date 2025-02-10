@@ -20,8 +20,6 @@ const LoginScreen = () => {
   const checkUserIfExist = async () => {
     if (tokenStore.token) {
       navigation.push({pathname: "/pages/dashboard"});
-    } else {
-      await AsyncStorage.clear();
     }
   }
 
@@ -29,17 +27,14 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const navigation = useRouter();
   const handleLogin = () => {
-    console.log("click")
     if (!nic || !password) {
       Alert.alert("Error", "Please fill out all fields!");
     } else {
-      console.log(nic,password)
         dispatch(userLoginAsync({nic,password})).then(res=>{
-          console.log(res)
           navigation.push({pathname: "/pages/dashboard"});
+          console.log(res);
         }).catch(error=>{
-          console.log(error)
-         alert("Error 500")
+        Alert.alert("Error",JSON.stringify(error));
         });
     }
   };
