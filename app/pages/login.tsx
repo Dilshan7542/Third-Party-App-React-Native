@@ -1,21 +1,25 @@
 import React, {useEffect, useState} from "react";
 import {Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Link, useLocalSearchParams, useRouter} from "expo-router";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 import {useSelector,useDispatch} from "react-redux";
 import {AppDispatch, RootState} from "@/store/Store";
 import {userLoginAsync} from "@/store/user/UserAction";
+import AppLoader from "@/components/AppLoader";
 
 const LoginScreen = () => {
   const params = useLocalSearchParams();
   const nicPram: string = params['nic']?.toString();
+  const [loader, setLoader] = useState(true);
   const useStore = useSelector((store:RootState)=> store.user);
   const tokenStore = useSelector((store:RootState)=> store.auth);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     checkUserIfExist();
+    setTimeout(()=>{
+      setLoader(false)
+    },10000)
   }, []);
   const checkUserIfExist = async () => {
     if (tokenStore.token) {
@@ -27,6 +31,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const navigation = useRouter();
   const handleLogin = () => {
+    setLoader(true);
     if (!nic || !password) {
       Alert.alert("Error", "Please fill out all fields!");
     } else {
@@ -35,10 +40,13 @@ const LoginScreen = () => {
           console.log(res);
         }).catch(error=>{
         Alert.alert("Error",JSON.stringify(error));
-        });
+        }).finally(()=>{
+          setLoader(false);
+          });
     }
   };
   return (<ThemedView style={styles.container}>
+    <AppLoader loading={loader} />
     <ThemedText style={styles.title}>Login</ThemedText>
     <TextInput
       style={styles.input}

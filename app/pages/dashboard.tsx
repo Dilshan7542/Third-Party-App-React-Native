@@ -63,11 +63,12 @@ const test=(status:number)=>{
   }
   Alert.alert("Build Trans",JSON.stringify(trans));
   dispatch(readyToCheckout(trans))
- /* if(status===1){
+  if(status===1){
     navigation.push({
       pathname: "/pages/test"
     });
-  }else if(status==2){
+  }
+ /* else if(status==2){
     navigation.push({
       pathname: "/pages/test2"
     });
@@ -150,6 +151,14 @@ const test=(status:number)=>{
   </ThemedView>
     </Link>
   </TouchableOpacity>
+    <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
+      <ThemedView style={styles.cartChildItem}>
+        <Image
+          source={require("../../assets/images/nlb.png")}
+          style={styles.cartImage}/>
+        <ThemedText>Test 01</ThemedText>
+      </ThemedView>
+    </TouchableOpacity>
 
    {/* <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
       <ThemedView style={styles.cartChildItem}>
