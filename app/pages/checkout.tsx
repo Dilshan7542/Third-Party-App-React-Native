@@ -9,6 +9,7 @@ import {SUCCESS} from "@/constants/ResponseCode";
 import {ThemedView} from "@/components/ThemedView";
 
 import DropDownPicker from "react-native-dropdown-picker";
+import AppLoader from "@/components/AppLoader";
 
 
 interface LabelAccount {
@@ -41,6 +42,7 @@ const FundTransferScreen = () => {
 
   }, []);
   const processPayment=()=>{
+    setIsClick(true);
     if (!useStore.user) {
     Alert.alert("user not exist :  ",JSON.stringify(useStore));
     }
@@ -64,6 +66,8 @@ const FundTransferScreen = () => {
         console.error(e);
         setIsClick(false);
         Alert.alert("response payment failed:  ",JSON.stringify(e));
+      }).finally(()=>{
+        setIsClick(false);
       });
     }
 

@@ -12,8 +12,11 @@ import {readyToCheckoutApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {loadingStatus} from "@/store/user/UserAction";
+import {ThemedView} from "@/components/ThemedView";
+import {ThemedText} from "@/components/ThemedText";
 
-export default function HomeScreen() {
+export default function AppScreen() {
   const authStore = useSelector((store: RootState) => store.auth);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
   const dispatch = useDispatch<AppDispatch>();
@@ -28,10 +31,11 @@ export default function HomeScreen() {
     }),
   });
   useEffect(() => {
+    dispatch(loadingStatus(false));
     if (Platform.OS !== "web") {
       setUpNotification();
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-        console.log("up ", notification)
+        console.log("up ", notification);
         setNotification(notification);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
@@ -95,6 +99,7 @@ export default function HomeScreen() {
   }, []);
   useEffect(() => {
     return () => {
+
     };
   }, []);
 
@@ -126,7 +131,7 @@ export default function HomeScreen() {
 
   }
 
-  return (<View style={styles.container}>
+  return (<ThemedView style={styles.container}>
     {/* Logo or Image */}
     <Image
       source={{
@@ -136,10 +141,10 @@ export default function HomeScreen() {
     />
 
     {/* Welcome Text */}
-    <Text style={styles.title}>Welcome to Our App</Text>
-    <Text style={styles.subtitle}>
+    <ThemedText style={styles.title}>Welcome to Our App</ThemedText>
+    <ThemedText style={styles.subtitle}>
       Discover amazing features and get started on your journey!
-    </Text>
+    </ThemedText>
 
     {/* Get Started Button */}
     <TouchableOpacity
@@ -148,12 +153,13 @@ export default function HomeScreen() {
     >
       <Text style={styles.buttonText}>Get Started</Text>
     </TouchableOpacity>
-  </View>);
+  </ThemedView>);
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#ffffff", // Background color
+    display:"flex",
+    flex: 1, justifyContent: "center", alignItems: "center", // Background color
     paddingHorizontal: 20,
   }, image: {
     width: 200, height: 200, marginBottom: 20,

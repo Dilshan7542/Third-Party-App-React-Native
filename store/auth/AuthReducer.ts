@@ -7,10 +7,12 @@ import {state} from "sucrase/dist/types/parser/traverser/base";
 
 export interface AuthState{
   token?:string,
+  loading:boolean,
   pushId:string
 }
 const init:AuthState={
-  pushId:"init"
+  pushId:"init",
+  loading:false
 };
 
 export const authReducer= createReducer(init,(stateBuilder)=>{

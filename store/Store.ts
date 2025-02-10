@@ -4,6 +4,7 @@ import {persistReducer, persistStore} from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {authReducer} from "@/store/auth/AuthReducer";
 import {checkoutReducer} from "@/store/checkout/CheckoutReducer";
+import {preferenceReducer} from "@/store/preference/PreferenceReducer";
 
 export type AppError = {
   message: string,
@@ -17,7 +18,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   auth: authReducer,
-  checkout: checkoutReducer
+  checkout: checkoutReducer,
+  preference:preferenceReducer
 });
 // 🔹 Create Persisted Reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -11,7 +11,7 @@ export const userLogout= createAction("[USER] LOGOUT");
 export const userSave= createAction<UserState>("[USER] SAVE");
 export const userUpdate= createAction<UserState>("[USER] UPDATE");
 export const userDelete= createAction<string>("[USER] DELETE");
-
+export const loadingStatus=createAction<boolean>("[USER LOADING]");
 
 
 // Define an async action

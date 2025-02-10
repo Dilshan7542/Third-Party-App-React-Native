@@ -80,7 +80,6 @@ const test=(status:number)=>{
 
 }
   return (<ThemedView style={{flex:1}}>
-  <AppHeader user={user}></AppHeader>
     <ThemedView style={{...styles.flexCenter, justifyContent: "center", alignItems: "center",minHeight:"50%"}}>
   <ThemedView style={{display: "flex", width: '100%', flexDirection: "row", padding: 5, flexWrap: "wrap"}}>
   <TouchableOpacity style={styles.cartItem} onPress={redirect}>

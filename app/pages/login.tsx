@@ -17,9 +17,6 @@ const LoginScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     checkUserIfExist();
-    setTimeout(()=>{
-      setLoader(false)
-    },10000)
   }, []);
   const checkUserIfExist = async () => {
     if (tokenStore.token) {
@@ -46,7 +43,6 @@ const LoginScreen = () => {
     }
   };
   return (<ThemedView style={styles.container}>
-    <AppLoader loading={loader} />
     <ThemedText style={styles.title}>Login</ThemedText>
     <TextInput
       style={styles.input}

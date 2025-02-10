@@ -1,6 +1,7 @@
 import { createReducer} from "@reduxjs/toolkit";
 import  * as userAction from "./UserAction"
 import {AppError} from "@/store/Store";
+import {state} from "sucrase/dist/types/parser/traverser/base";
 export interface IUser {
     id: string,
     name:string,
@@ -27,7 +28,12 @@ stateBuilder
    return init;
   })
     .addCase(userAction.userLogout,()=> init)
-    .addCase(userAction.userSave,(_state, action)=> action.payload);
+    .addCase(userAction.loadingStatus,(state, action)=> {
+      return {
+        ...state,
+        loading:action.payload
+      }
+    });
 
 
 });
