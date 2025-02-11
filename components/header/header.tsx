@@ -26,7 +26,7 @@ const AppHeader = () => {
     if (theme) {
       dispatch(themeColorAction("light"));
     } else {
-      dispatch(themeColorAction("light"));
+      dispatch(themeColorAction("dark"));
     }
     return !theme;
   });
@@ -50,7 +50,7 @@ const AppHeader = () => {
         <TouchableOpacity>
           <Switch
             trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={isDarkTheme ? '#f5dd4b' : '#f4f3f4'}
+            thumbColor={isDarkTheme ? '#111107' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitch}
             value={isDarkTheme}
