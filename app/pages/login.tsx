@@ -49,8 +49,6 @@ const LoginScreen = () => {
     <ThemedView style={styles.container}>
  <View style={{display:"flex",width:"100%"}}>
    <View style={{width:"100%",height:"50%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>
-{/*   <ImageBackground style={styles.loginBackground} source={require("../../assets/images/login.jpg")}>
-     </ImageBackground>*/}
    <DashboardSlider></DashboardSlider>
    </View>
    <View style={{padding:20}}>
