@@ -16,9 +16,10 @@ export interface CheckoutState {
 const init:CheckoutState={
 }
 export const checkoutReducer= createReducer(init,(stateBuilder)=>{
-  stateBuilder.addCase(readyToCheckout,(state, action)=>{
+   stateBuilder.addCase(readyToCheckout,(state, action)=>{
     return {
-      data:action.payload
+      data:action.payload,
+      error:undefined
     }
   })
 })

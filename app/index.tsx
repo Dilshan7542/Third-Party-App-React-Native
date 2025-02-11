@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Image, Platform, StyleSheet, Text, TouchableOpacity, View, Alert} from "react-native";
+import {Image, Platform, StyleSheet, Text, TouchableOpacity, View, Alert, SafeAreaView} from "react-native";
 import {useRouter} from "expo-router";
 import * as Notifications from 'expo-notifications';
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
@@ -105,8 +105,6 @@ export default function AppScreen() {
   }, []);
 
   async function isUserLogged() {
-  await NavigationBar.setVisibilityAsync("hidden");
-
     if (authStore.token) {
       setTimeout(() => {
         navigation.navigate({pathname: "/pages/dashboard"});
@@ -134,7 +132,7 @@ export default function AppScreen() {
 
   }
 
-  return (<ThemedView style={styles.container}>
+  return (<SafeAreaView style={styles.container}>
     {/* Logo or Image */}
     <Image
       source={{
@@ -156,7 +154,7 @@ export default function AppScreen() {
     >
       <Text style={styles.buttonText}>Get Started</Text>
     </TouchableOpacity>
-  </ThemedView>);
+  </SafeAreaView>);
 }
 
 const styles = StyleSheet.create({

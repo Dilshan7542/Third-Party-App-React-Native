@@ -6,8 +6,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/store/Store";
 import {userLogout} from "@/store/user/UserAction";
 import {IUser} from "@/store/user/UserReducer";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {themeColorAction} from "@/store/preference/PreferenceAction";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 export interface Props {
   themeFn: (theme: ColorSchemeName) => void
@@ -18,9 +19,16 @@ const AppHeader = () => {
   const [user, setUser] = useState<IUser | undefined>(undefined)
   const dispatch = useDispatch<AppDispatch>();
   const userStore = useSelector((store: RootState) => store.user);
+  const preferenceStore = useSelector((store: RootState) => store.preference);
   const [isDarkTheme, setDarkTheme] = useState(false);
   useEffect(() => {
     setUser(userStore.user);
+    setDarkTheme(preferenceStore.theme=="dark");
+    if(isDarkTheme){
+      dispatch(themeColorAction("dark"));
+    }else{
+      dispatch(themeColorAction("light"));
+    }
   }, [userStore]);
   const toggleSwitch = () => setDarkTheme(theme => {
     if (theme) {
@@ -34,7 +42,7 @@ const AppHeader = () => {
     dispatch(userLogout());
     navigation.push({pathname: "/pages/login"});
   }
-  return (<ThemedView style={{paddingTop: StatusBar.currentHeight}} lightColor={"dark"} darkColor={"white"}>
+  return (<SafeAreaView>
     <ThemedView style={style.container} lightColor={"black"} darkColor={"white"}>
       <View style={{display: "flex", justifyContent: "center"}}>
         {user ?
@@ -58,7 +66,7 @@ const AppHeader = () => {
         </TouchableOpacity>
       </View>
     </ThemedView>
-  </ThemedView>);
+  </SafeAreaView>);
 
 }
 

@@ -12,6 +12,7 @@ import {PersistGate} from "redux-persist/integration/react";
 import AppLoader from "@/components/AppLoader";
 import AppHeader from "@/components/header/header";
 import {ThemeProvider} from "@/context/ThemeProvider";
+import {SafeAreaProvider} from "react-native-safe-area-context";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,18 +34,20 @@ export default function RootLayout() {
 
   return (<Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <StatusBar style="auto"/>
           <ThemeProvider>
+            <SafeAreaProvider>
+        <StatusBar style="dark"/>
             <Stack>
               <Stack.Screen name="+not-found"/>
               <Stack.Screen name="index" options={{title: "Start ABCD App"}} key={"index"}/>
               <Stack.Screen name="pages/frame-view" options={{title: "Web view"}} key={"frame-view"}/>
-              <Stack.Screen name="pages/login" options={{title: "Register App"}} key={"login"}/>
-              <Stack.Screen name="pages/register" options={{title: "Login"}} key={"register"}/>
+              <Stack.Screen name="pages/login" options={{title: "Register App",headerShown:false}} key={"login"}/>
+              <Stack.Screen name="pages/register" options={{title: "Login",headerShown:false}} key={"register"}/>
               <Stack.Screen name="pages/dashboard" options={{header: () => <AppHeader/>}} key={"dashboard"}/>
               <Stack.Screen name="pages/checkout" options={{title: "Checkout Payment"}}/>
               <Stack.Screen name="pages/test" options={{title: "Checkout Payment"}}/>
             </Stack>
+            </SafeAreaProvider>
           </ThemeProvider>
       </PersistGate>
     </Provider>

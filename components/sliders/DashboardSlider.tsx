@@ -23,14 +23,14 @@ const renderItem = ({ item }:{item:Data}) => (
   </ThemedView>
 );
 
-export default function App() {
+export default function DashboardSlider() {
   return (
     <View style={styles.container}>
       <Carousel
         data={data}
         renderItem={renderItem}
         width={width}
-        height={250}
+        height={230}
         loop={true} // Optional: Infinite scrolling
       />
     </View>

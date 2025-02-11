@@ -7,6 +7,7 @@ import {RegisterReq, registerUser} from "@/service/user-service";
 import {ThemedView} from "@/components/ThemedView";
 import {Link, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -36,116 +37,117 @@ export default function Register() {
     })
   };
   return (
-    <ThemedView style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+   <SafeAreaView style={styles.container}>
+     <ThemedView >
+       <ThemedText style={styles.title}>Register</ThemedText>
+       <Controller
+         control={control}
+         render={({ field: { onChange, onBlur, value } }) => (
+           <TextInput
+             style={styles.input}
+             placeholder="NIC"
+             onBlur={onBlur}
+             onChangeText={onChange}
+             value={value}
+           />
+         )}
+         name="nic"
+         defaultValue=""
+       />
+       {errors.nic && <Text style={styles.errorText}>{errors.nic.message}</Text>}
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="NIC"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="nic"
-        defaultValue=""
-      />
-      {errors.nic && <Text style={styles.errorText}>{errors.nic.message}</Text>}
+       <Controller
+         control={control}
+         render={({ field: { onChange, onBlur, value } }) => (
+           <TextInput
+             style={styles.input}
+             placeholder="First Name"
+             onBlur={onBlur}
+             onChangeText={onChange}
+             value={value}
+           />
+         )}
+         name="firstName"
+         defaultValue=""
+       />
+       {errors.firstName && <Text style={styles.errorText}>{errors.firstName.message}</Text>}
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="First Name"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="firstName"
-        defaultValue=""
-      />
-      {errors.firstName && <Text style={styles.errorText}>{errors.firstName.message}</Text>}
+       <Controller
+         control={control}
+         render={({ field: { onChange, onBlur, value } }) => (
+           <TextInput
+             style={styles.input}
+             placeholder="Last Name"
+             onBlur={onBlur}
+             onChangeText={onChange}
+             value={value}
+           />
+         )}
+         name="lastName"
+         defaultValue=""
+       />
+       {errors.lastName && <Text style={styles.errorText}>{errors.lastName.message}</Text>}
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Last Name"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-        name="lastName"
-        defaultValue=""
-      />
-      {errors.lastName && <Text style={styles.errorText}>{errors.lastName.message}</Text>}
+       <Controller
+         control={control}
+         render={({ field: { onChange, onBlur, value } }) => (
+           <TextInput
+             style={styles.input}
+             placeholder="Email"
+             onBlur={onBlur}
+             onChangeText={onChange}
+             value={value}
+             keyboardType="email-address"
+           />
+         )}
+         name="email"
+         defaultValue=""
+       />
+       {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            keyboardType="email-address"
-          />
-        )}
-        name="email"
-        defaultValue=""
-      />
-      {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
+       <Controller
+         control={control}
+         render={({ field: { onChange, onBlur, value } }) => (
+           <TextInput
+             style={styles.input}
+             placeholder="Mobile Number"
+             onBlur={onBlur}
+             onChangeText={onChange}
+             value={value}
+             keyboardType="phone-pad"
+           />
+         )}
+         name="mobileNumber"
+         defaultValue=""
+       />
+       {errors.mobileNumber && <Text style={styles.errorText}>{errors.mobileNumber.message}</Text>}
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Mobile Number"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            keyboardType="phone-pad"
-          />
-        )}
-        name="mobileNumber"
-        defaultValue=""
-      />
-      {errors.mobileNumber && <Text style={styles.errorText}>{errors.mobileNumber.message}</Text>}
-
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-          />
-        )}
-        name="password"
-        defaultValue=""
-      />
-      {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
-      <ThemedView style={{display:"flex",justifyContent:"space-between",gap:10}}>
-      <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-        <Text style={styles.buttonText}>Register</Text>
-      </TouchableOpacity>
-        <Link href={"/pages/login"} style={styles.buttonLogin}>
-            <ThemedText style={{fontWeight:"bold",textAlign:"center"}}>Login</ThemedText>
-        </Link>
-      </ThemedView>
-    </ThemedView>
+       <Controller
+         control={control}
+         render={({ field: { onChange, onBlur, value } }) => (
+           <TextInput
+             style={styles.input}
+             placeholder="Password"
+             onBlur={onBlur}
+             onChangeText={onChange}
+             value={value}
+             secureTextEntry
+           />
+         )}
+         name="password"
+         defaultValue=""
+       />
+       {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+       <ThemedView style={{display:"flex",justifyContent:"space-between",gap:10}}>
+         <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
+           <Text style={styles.buttonText}>Register</Text>
+         </TouchableOpacity>
+         <Link href={"/pages/login"} style={styles.buttonLogin}>
+           <ThemedText style={{fontWeight:"bold",textAlign:"center"}}>Login</ThemedText>
+         </Link>
+       </ThemedView>
+     </ThemedView>
+   </SafeAreaView>
   );
 }
 

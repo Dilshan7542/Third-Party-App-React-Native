@@ -1,4 +1,4 @@
-import {Alert, Image, Linking, SafeAreaView, StyleSheet, TouchableOpacity} from "react-native";
+import {Alert, Animated, Image, Linking, StyleSheet, TouchableOpacity, View} from "react-native";
 import {ThemedView} from "@/components/ThemedView";
 import {Link, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
@@ -11,8 +11,15 @@ import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
 import DashboardSlider from "@/components/sliders/DashboardSlider";
-
-
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import ScrollView = Animated.ScrollView;
+const tileCartList:{name:string,icon:string,url:string}[]=[
+  {name:"Pay",icon:"",url:""},
+  {name:"Scan QR",icon:"",url:""},
+  {name:"Send",icon:"",url:""},
+  {name:"Reload",icon:"",url:""},
+]
 
 export default function DashBoard() {
   const navigation = useRouter();
@@ -84,12 +91,20 @@ export default function DashBoard() {
 
   }
   return (
-
-  <SafeAreaView style={{flex: 1}}>
-    <ThemedView style={{height:'100%'}}>
-      <ThemedView style={{...styles.flexCenter, justifyContent: "center", minHeight: "50%"}}>
+  <ThemedView style={{flex: 1}}>
+    <ScrollView>
+      <ThemedView style={{...styles.flexCenter, minHeight: "50%"}}>
         <ThemedView style={{paddingTop:10}}>
           <DashboardSlider></DashboardSlider>
+        </ThemedView>
+        <ThemedView style={styles.tileCartSection}>
+          {tileCartList.map(list=>
+            <View style={styles.tileCartItem}>
+              <ThemedView style={styles.tileCartChild} lightColor={"#ffffff"}>
+                <ThemedText>{list.name}</ThemedText>
+              </ThemedView>
+            </View>
+          )}
         </ThemedView>
         <ThemedView style={{display: "flex", width: '100%', flexDirection: "row", padding: 5, flexWrap: "wrap"}}>
           <TouchableOpacity style={styles.cartItem} onPress={redirect}>
@@ -97,7 +112,7 @@ export default function DashBoard() {
               <Image
                 source={require("../../assets/images/Sweep-logo.png")}
                 style={styles.cartImage}/>
-              <ThemedText>DLB App</ThemedText>
+              <ThemedText>DLB</ThemedText>
             </ThemedView>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cartItem} onPress={() => {
@@ -107,7 +122,7 @@ export default function DashBoard() {
               <Image
                 source={require("../../assets/images/nlb.png")}
                 style={styles.cartImage}/>
-              <ThemedText>NLB Apps</ThemedText>
+              <ThemedText>NLB</ThemedText>
             </ThemedView>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cartItem} onPress={() => {
@@ -127,6 +142,14 @@ export default function DashBoard() {
                 source={require("../../assets/images/iit.png")}
                 style={styles.cartImage}/>
               <ThemedText>IIT</ThemedText>
+            </ThemedView>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartItem}>
+            <ThemedView style={styles.cartChildItem}>
+              <Image
+                source={require("../../assets/images/merchant/ez-cash.png")}
+                style={styles.cartImage}/>
+              <ThemedText>Ez Cash</ThemedText>
             </ThemedView>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cartItem}>
@@ -204,8 +227,8 @@ export default function DashBoard() {
         </ThemedView>
       </ThemedView>
 
-    </ThemedView>
-  </SafeAreaView>
+    </ScrollView>
+  </ThemedView>
   )
 }
 const styles = StyleSheet.create({
@@ -213,33 +236,43 @@ const styles = StyleSheet.create({
     flex: 1, // Make the container fill the entire screen
   }, flexCenter: {
     justifyContent: "center", alignItems: "center", display: "flex",
-  }, cartItem: {
+  },
+  tileCartSection:{
+    display:'flex',flexDirection:"row",
+    height:70,
+  },
+  tileCartItem:{
+   flex:1,
+    display:"flex",
+    alignItems:"center",
+    height:"100%"
+  },
+  tileCartChild:{
+    padding:5,
+    display:"flex",
+    alignItems:"center",
+    justifyContent:"center",
+    borderWidth:1,
+    borderRadius: 12,
+    borderColor: "gray",
+    height:"95%",
+    width:"95%"
+  },
+  cartItem: {
     borderStyle: "solid", width: '25%', marginTop: 5, display: "flex", justifyContent: "center", alignItems: "center"
-  }, cartChildItem: {
+  },
+  cartChildItem: {
     width:"95%",
-    height:150,
+    height:100,
+    gap:10,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "gray",
-    padding: 5,
-    flexDirection: "column",
+    padding: 2,
     justifyContent: "center",
     alignItems: "center"
-  }, cartImage: {
-    width:50, height: 60, borderRadius: 12
+  },
+  cartImage: {
+    width:40, height: 40, borderRadius: 5
   }
 });
-
-
-/*  return (
-    <SafeAreaView style={styles.container}>
-      <WebView
-        style={styles.webView}
-        source={{
-          uri: "http://192.168.137.78:4200/#/pre/faq"
-        }}
-        onNavigationStateChange={(state) => {
-        }}
-        startInLoadingState={true}
-      />
-    </SafeAreaView>);*/

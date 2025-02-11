@@ -7,11 +7,9 @@ import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {ThemedView} from "@/components/ThemedView";
-
 import DropDownPicker from "react-native-dropdown-picker";
-import AppLoader from "@/components/AppLoader";
 import {loadingStatus} from "@/store/user/UserAction";
-
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface LabelAccount {
   label: string,
@@ -42,7 +40,7 @@ const FundTransferScreen = () => {
       Alert.alert("Error :  ",JSON.stringify(e));
     }
 
-  }, []);
+  }, [checkoutStore]);
   const processPayment=()=>{
     setIsClick(true);
     if (!useStore.user) {
@@ -83,7 +81,7 @@ const FundTransferScreen = () => {
   };
   if(!detail){
    return (
-     <ThemedView>
+     <SafeAreaView>
        <ThemedText>Test</ThemedText>
        <TouchableOpacity style={styles.button} onPress={()=>{
          if(detail){
@@ -94,11 +92,11 @@ const FundTransferScreen = () => {
        }}>
          <Text style={styles.buttonText}>Test</Text>
        </TouchableOpacity>
-     </ThemedView>)
+     </SafeAreaView>)
   }
   return (
     <ThemedView style={styles.container}>
-      <Text style={styles.title}>Fund Transfer</Text>
+      <ThemedText style={styles.title}>Fund Transfer</ThemedText>
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>From</ThemedText>
         <DropDownPicker
@@ -119,8 +117,8 @@ const FundTransferScreen = () => {
         <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} editable={false}  />
       </ThemedView>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>Amount</Text>
+      <ThemedView style={styles.section}>
+        <ThemedText style={styles.label}>Amount</ThemedText>
         <TextInput
           style={styles.input}
           keyboardType="numeric"
@@ -128,27 +126,27 @@ const FundTransferScreen = () => {
           editable={false}
         />
        {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
-      </View>
-      <View style={styles.section}>
+      </ThemedView>
+      <ThemedView style={styles.section}>
         <Text style={styles.label}>Date</Text>
         <Text style={styles.value}>{detail.date}</Text>
-      </View>
-      <View style={styles.section}>
+      </ThemedView>
+      <ThemedView style={styles.section}>
         <Text style={styles.label}>Receiver's Name</Text>
         <TextInput
           style={styles.input}
           value={detail.accountName}
           editable={false}
         />
-      </View>
-      <View style={styles.section}>
+      </ThemedView>
+      <ThemedView style={styles.section}>
         <Text style={styles.label}>Ref Number</Text>
         <TextInput
           style={styles.input}
           value={detail.ref}
           editable={false}
         />
-      </View>
+      </ThemedView>
 
 
       <TouchableOpacity style={styles.button} disabled={isClick}  onPress={processPayment}>

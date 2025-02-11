@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity} from "react-native";
+import {Alert, Button, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {Link, useLocalSearchParams, useRouter} from "expo-router";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
@@ -7,6 +7,9 @@ import {useSelector,useDispatch} from "react-redux";
 import {AppDispatch, RootState} from "@/store/Store";
 import {loadingStatus, userLoginAsync} from "@/store/user/UserAction";
 import AppLoader from "@/components/AppLoader";
+import {SafeAreaView} from "react-native-safe-area-context";
+import DashBoard from "@/app/pages/dashboard";
+import DashboardSlider from "@/components/sliders/DashboardSlider";
 
 const LoginScreen = () => {
   const params = useLocalSearchParams();
@@ -42,39 +45,57 @@ const LoginScreen = () => {
           });
     }
   };
-  return (<ThemedView style={styles.container}>
-    <ThemedText style={styles.title}>Login</ThemedText>
-    <TextInput
-      style={styles.input}
-      placeholder="NIC"
-      value={nic}
-      onChangeText={setNic}
-      keyboardType="default"
-    />
-    <TextInput
-      style={styles.input}
-      placeholder="Password"
-      value={password}
-      onChangeText={setPassword}
-      secureTextEntry
-    />
-    <ThemedView style={{display:"flex",justifyContent:"space-between",width:"100%",gap:10}}>
-      <TouchableOpacity style={styles.buttonLogin} onPress={handleLogin}>
-        <ThemedText lightColor={"white"} darkColor={"black"} style={styles.buttonText}>Login</ThemedText>
-      </TouchableOpacity>
-      <Link href={"/pages/register"} style={styles.buttonRegister}>
-        <ThemedText style={styles.buttonText}>Register</ThemedText>
-      </Link>
-    </ThemedView>
+  return (
+    <ThemedView style={styles.container}>
+ <View style={{display:"flex",width:"100%"}}>
+   <View style={{width:"100%",height:"50%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>
+{/*   <ImageBackground style={styles.loginBackground} source={require("../../assets/images/login.jpg")}>
+     </ImageBackground>*/}
+   <DashboardSlider></DashboardSlider>
+   </View>
+   <View style={{padding:20}}>
+     <ThemedText style={styles.title}>Login</ThemedText>
+     <ThemedView>
+       <TextInput
+         style={styles.input}
+         placeholder="NIC"
+         value={nic}
+         onChangeText={setNic}
+         keyboardType="default"
+       />
+       <TextInput
+         style={styles.input}
+         placeholder="Password"
+         value={password}
+         onChangeText={setPassword}
+         secureTextEntry
+       />
+       <ThemedView style={{display:"flex",justifyContent:"space-between",width:"100%",gap:10}}>
+         <TouchableOpacity style={styles.buttonLogin} onPress={handleLogin}>
+           <ThemedText lightColor={"white"} darkColor={"black"} style={styles.buttonText}>Login</ThemedText>
+         </TouchableOpacity>
+         <Link href={"/pages/register"} style={styles.buttonRegister}>
+           <ThemedText style={styles.buttonText}>Register</ThemedText>
+         </Link>
+       </ThemedView>
+     </ThemedView>
+   </View>
+ </View>
   </ThemedView>);
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, justifyContent: "center", alignItems: "center", padding: 20,
+    flex: 1
   }, title: {
-    fontSize: 24, fontWeight: "bold", marginBottom: 20,
-  }, input: {
+    fontSize: 24, fontWeight: "bold", marginBottom: 20,textAlign:"center"
+  },
+  loginBackground:{
+    width:"100%",
+    height:"100%",
+    backgroundColor:"red"
+  },
+  input: {
     width: "100%",
     height: 50,
     backgroundColor: "#fff",
