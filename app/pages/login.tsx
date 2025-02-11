@@ -5,13 +5,13 @@ import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
 import {useSelector,useDispatch} from "react-redux";
 import {AppDispatch, RootState} from "@/store/Store";
-import {userLoginAsync} from "@/store/user/UserAction";
+import {loadingStatus, userLoginAsync} from "@/store/user/UserAction";
 import AppLoader from "@/components/AppLoader";
 
 const LoginScreen = () => {
   const params = useLocalSearchParams();
   const nicPram: string = params['nic']?.toString();
-  const [loader, setLoader] = useState(true);
+
   const useStore = useSelector((store:RootState)=> store.user);
   const tokenStore = useSelector((store:RootState)=> store.auth);
   const dispatch = useDispatch<AppDispatch>();
@@ -28,7 +28,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const navigation = useRouter();
   const handleLogin = () => {
-    setLoader(true);
+ dispatch(loadingStatus(true));
     if (!nic || !password) {
       Alert.alert("Error", "Please fill out all fields!");
     } else {
@@ -38,7 +38,7 @@ const LoginScreen = () => {
         }).catch(error=>{
         Alert.alert("Error",JSON.stringify(error));
         }).finally(()=>{
-          setLoader(false);
+          dispatch(loadingStatus(false));
           });
     }
   };

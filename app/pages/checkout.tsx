@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Alert, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/Store";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "@/store/Store";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
@@ -10,6 +10,7 @@ import {ThemedView} from "@/components/ThemedView";
 
 import DropDownPicker from "react-native-dropdown-picker";
 import AppLoader from "@/components/AppLoader";
+import {loadingStatus} from "@/store/user/UserAction";
 
 
 interface LabelAccount {
@@ -20,6 +21,7 @@ interface LabelAccount {
 const FundTransferScreen = () => {
   const useStore = useSelector((store: RootState) => store.user);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
+  const dispatch = useDispatch<AppDispatch>();
   const [isClick, setIsClick] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [bankList, setBankList] = useState<LabelAccount[]>([])
@@ -51,11 +53,14 @@ const FundTransferScreen = () => {
     }
     if(useStore.user && detail){
       setIsClick(true);
-      processPaymentApi({
+     const req= {
         nic:useStore.user.nic,
-        amount:detail.amount,
+          amount:detail.amount,
         transactionRef:detail.ref
-      }).then(resp=>{
+      }
+      Alert.alert("Request Payment :  ",JSON.stringify(req));
+      dispatch(loadingStatus(true));
+      processPaymentApi(req).then(resp=>{
         Alert.alert("response payment:  ",JSON.stringify(resp));
         if (resp.status === SUCCESS) {
           openBrowser(resp.content.webUrl);
@@ -68,6 +73,7 @@ const FundTransferScreen = () => {
         Alert.alert("response payment failed:  ",JSON.stringify(e));
       }).finally(()=>{
         setIsClick(false);
+        dispatch(loadingStatus(false));
       });
     }
 
