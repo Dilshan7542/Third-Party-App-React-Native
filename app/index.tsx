@@ -4,7 +4,7 @@ import {useRouter} from "expo-router";
 import * as Notifications from 'expo-notifications';
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
 import {useDispatch, useSelector} from "react-redux";
-
+import * as NavigationBar from 'expo-navigation-bar';
 import {AppDispatch, RootState, store} from "@/store/Store";
 import {setAuthPushId} from "@/store/auth/AuthAction";
 import {readyToCheckout} from "@/store/checkout/CheckoutAction";
@@ -32,6 +32,7 @@ export default function AppScreen() {
   });
   useEffect(() => {
     dispatch(loadingStatus(false));
+
     if (Platform.OS !== "web") {
       setUpNotification();
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
@@ -104,6 +105,8 @@ export default function AppScreen() {
   }, []);
 
   async function isUserLogged() {
+  await NavigationBar.setVisibilityAsync("hidden");
+
     if (authStore.token) {
       setTimeout(() => {
         navigation.navigate({pathname: "/pages/dashboard"});

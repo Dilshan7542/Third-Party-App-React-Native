@@ -1,4 +1,4 @@
-import {Alert, Image, Linking, StyleSheet, TouchableOpacity} from "react-native";
+import {Alert, Image, Linking, SafeAreaView, StyleSheet, TouchableOpacity} from "react-native";
 import {ThemedView} from "@/components/ThemedView";
 import {Link, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
@@ -10,6 +10,8 @@ import {openBrowserAsync} from "expo-web-browser";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
+import DashboardSlider from "@/components/sliders/DashboardSlider";
+
 
 
 export default function DashBoard() {
@@ -81,93 +83,99 @@ export default function DashBoard() {
      }*/
 
   }
-  return (<ThemedView style={{flex: 1}}>
-    <ThemedView style={{...styles.flexCenter, justifyContent: "center", alignItems: "center", minHeight: "50%"}}>
-      <ThemedView style={{display: "flex", width: '100%', flexDirection: "row", padding: 5, flexWrap: "wrap"}}>
-        <TouchableOpacity style={styles.cartItem} onPress={redirect}>
-          <ThemedView style={styles.cartChildItem}>
-            <Image
-              source={require("../../assets/images/Sweep-logo.png")}
-              style={styles.cartImage}/>
-            <ThemedText>DLB App</ThemedText>
-          </ThemedView>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cartItem} onPress={() => {
-          test(1)
-        }}>
-          <ThemedView style={styles.cartChildItem}>
-            <Image
-              source={require("../../assets/images/nlb.png")}
-              style={styles.cartImage}/>
-            <ThemedText>NLB Apps</ThemedText>
-          </ThemedView>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cartItem} onPress={() => {
-          test(0)
-        }}>
-          <ThemedView style={styles.cartChildItem}>
-            <Image
-              source={require("../../assets/images/damro.png")}
-              style={styles.cartImage}/>
-            <ThemedText>Damro App</ThemedText>
-          </ThemedView>
+  return (
 
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cartItem}>
-          <ThemedView style={styles.cartChildItem}>
-            <Image
-              source={require("../../assets/images/iit.png")}
-              style={styles.cartImage}/>
-            <ThemedText>IIT</ThemedText>
-          </ThemedView>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cartItem}>
-          <ThemedView style={styles.cartChildItem}>
-            <Image
-              source={require("../../assets/images/damro.png")}
-              style={styles.cartImage}/>
-            <ThemedText>Damro</ThemedText>
-          </ThemedView>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cartItem}>
-          <ThemedView style={styles.cartChildItem}>
-            <Image
-              source={require("../../assets/images/keels.png")}
-              style={styles.cartImage}/>
-            <ThemedText>Keels</ThemedText>
-          </ThemedView>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cartItem}>
-          <ThemedView style={styles.cartChildItem}>
-            <Image
-              source={require("../../assets/images/foodCity.jpg")}
-              style={styles.cartImage}/>
-            <ThemedText>Food City</ThemedText>
-          </ThemedView>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.cartItem}>
-          <Link href={"/pages/checkout"}>
+  <SafeAreaView style={{flex: 1}}>
+    <ThemedView style={{height:'100%'}}>
+      <ThemedView style={{...styles.flexCenter, justifyContent: "center", minHeight: "50%"}}>
+        <ThemedView style={{paddingTop:10}}>
+          <DashboardSlider></DashboardSlider>
+        </ThemedView>
+        <ThemedView style={{display: "flex", width: '100%', flexDirection: "row", padding: 5, flexWrap: "wrap"}}>
+          <TouchableOpacity style={styles.cartItem} onPress={redirect}>
             <ThemedView style={styles.cartChildItem}>
               <Image
-                source={require("../../assets/images/abans.png")}
+                source={require("../../assets/images/Sweep-logo.png")}
                 style={styles.cartImage}/>
-              <ThemedText>Abans</ThemedText>
+              <ThemedText>DLB App</ThemedText>
             </ThemedView>
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cartItem} onPress={() => {
-          test(1)
-        }}>
-          <ThemedView style={styles.cartChildItem}>
-            <Image
-              source={require("../../assets/images/nlb.png")}
-              style={styles.cartImage}/>
-            <ThemedText>Test 01</ThemedText>
-          </ThemedView>
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartItem} onPress={() => {
+            test(1)
+          }}>
+            <ThemedView style={styles.cartChildItem}>
+              <Image
+                source={require("../../assets/images/nlb.png")}
+                style={styles.cartImage}/>
+              <ThemedText>NLB Apps</ThemedText>
+            </ThemedView>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartItem} onPress={() => {
+            test(0)
+          }}>
+            <ThemedView style={styles.cartChildItem}>
+              <Image
+                source={require("../../assets/images/damro.png")}
+                style={styles.cartImage}/>
+              <ThemedText>Damro App</ThemedText>
+            </ThemedView>
 
-        {/* <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartItem}>
+            <ThemedView style={styles.cartChildItem}>
+              <Image
+                source={require("../../assets/images/iit.png")}
+                style={styles.cartImage}/>
+              <ThemedText>IIT</ThemedText>
+            </ThemedView>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartItem}>
+            <ThemedView style={styles.cartChildItem}>
+              <Image
+                source={require("../../assets/images/damro.png")}
+                style={styles.cartImage}/>
+              <ThemedText>Damro</ThemedText>
+            </ThemedView>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartItem}>
+            <ThemedView style={styles.cartChildItem}>
+              <Image
+                source={require("../../assets/images/keels.png")}
+                style={styles.cartImage}/>
+              <ThemedText>Keels</ThemedText>
+            </ThemedView>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartItem}>
+            <ThemedView style={styles.cartChildItem}>
+              <Image
+                source={require("../../assets/images/foodCity.jpg")}
+                style={styles.cartImage}/>
+              <ThemedText>Food City</ThemedText>
+            </ThemedView>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.cartItem}>
+            <Link href={"/pages/checkout"}>
+              <ThemedView style={styles.cartChildItem}>
+                <Image
+                  source={require("../../assets/images/abans.png")}
+                  style={styles.cartImage}/>
+                <ThemedText>Abans</ThemedText>
+              </ThemedView>
+            </Link>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartItem} onPress={() => {
+            test(1)
+          }}>
+            <ThemedView style={styles.cartChildItem}>
+              <Image
+                source={require("../../assets/images/nlb.png")}
+                style={styles.cartImage}/>
+              <ThemedText>Test 01</ThemedText>
+            </ThemedView>
+          </TouchableOpacity>
+
+          {/* <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
       <ThemedView style={styles.cartChildItem}>
         <Image
           source={require("../../assets/images/nlb.png")}
@@ -193,10 +201,12 @@ export default function DashBoard() {
     </TouchableOpacity>*/}
 
 
+        </ThemedView>
       </ThemedView>
-    </ThemedView>
 
-  </ThemedView>)
+    </ThemedView>
+  </SafeAreaView>
+  )
 }
 const styles = StyleSheet.create({
   container: {
@@ -206,15 +216,17 @@ const styles = StyleSheet.create({
   }, cartItem: {
     borderStyle: "solid", width: '25%', marginTop: 5, display: "flex", justifyContent: "center", alignItems: "center"
   }, cartChildItem: {
+    width:"95%",
+    height:150,
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "gray",
     padding: 5,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"
   }, cartImage: {
-    width: 70, height: 60, borderRadius: 12
+    width:50, height: 60, borderRadius: 12
   }
 });
 
