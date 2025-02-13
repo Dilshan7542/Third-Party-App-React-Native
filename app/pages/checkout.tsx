@@ -56,10 +56,9 @@ const FundTransferScreen = () => {
           amount:detail.amount,
         transactionRef:detail.ref
       }
-      Alert.alert("Request Payment :  ",JSON.stringify(req));
       dispatch(loadingStatus(true));
       processPaymentApi(req).then(resp=>{
-        Alert.alert("response payment:  ",JSON.stringify(resp));
+
         if (resp.status === SUCCESS) {
           openBrowser(resp.content.webUrl);
         }else{
@@ -96,6 +95,7 @@ const FundTransferScreen = () => {
   }
   return (
     <ThemedView style={styles.container}>
+    <ThemedView>
       <ThemedText style={styles.title}>Fund Transfer</ThemedText>
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>From</ThemedText>
@@ -116,7 +116,6 @@ const FundTransferScreen = () => {
         <ThemedText style={styles.label}>To Account</ThemedText>
         <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} editable={false}  />
       </ThemedView>
-
       <ThemedView style={styles.section}>
         <ThemedText style={styles.label}>Amount</ThemedText>
         <TextInput
@@ -125,7 +124,6 @@ const FundTransferScreen = () => {
           value={detail.amount.toString()}
           editable={false}
         />
-       {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
       </ThemedView>
       <ThemedView style={styles.section}>
         <Text style={styles.label}>Date</Text>
@@ -153,6 +151,7 @@ const FundTransferScreen = () => {
         <Text style={styles.buttonText}>Proceed to pay</Text>
       </TouchableOpacity>
     </ThemedView>
+    </ThemedView>
   );
 };
 
@@ -160,7 +159,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
   },
   title: {
     fontSize: 20,
@@ -176,7 +174,7 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 16,
-    color: "#000",
+    color: "#ffffff",
   },
   subText: {
     fontSize: 12,

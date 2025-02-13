@@ -19,6 +19,7 @@ apiClient.interceptors.request.use(async function (request) {
     request.headers['Authorization'] = `Bearer ` + authState.token;
   /*  request.headers['x-instance-id'] = "BBS6CD15-58D4-4FAC-9E6C-5AE9FB4FF535";*/
   }
+
   return request;
 }, function (error) {
   return Promise.reject(error);

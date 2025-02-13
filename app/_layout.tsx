@@ -39,7 +39,7 @@ export default function RootLayout() {
         <StatusBar style="dark"/>
             <Stack>
               <Stack.Screen name="+not-found"/>
-              <Stack.Screen name="index" options={{title: "Start ABCD App"}} key={"index"}/>
+              <Stack.Screen name="index" options={{headerShown:false}} key={"index"}/>
               <Stack.Screen name="pages/frame-view" options={{title: "Web view"}} key={"frame-view"}/>
               <Stack.Screen name="pages/login" options={{title: "Register App",headerShown:false}} key={"login"}/>
               <Stack.Screen name="pages/register" options={{title: "Login",headerShown:false}} key={"register"}/>

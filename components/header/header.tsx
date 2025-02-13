@@ -20,7 +20,7 @@ const AppHeader = () => {
   const dispatch = useDispatch<AppDispatch>();
   const userStore = useSelector((store: RootState) => store.user);
   const preferenceStore = useSelector((store: RootState) => store.preference);
-  const [isDarkTheme, setDarkTheme] = useState(false);
+  const [isDarkTheme, setDarkTheme] = useState(preferenceStore.theme=="dark");
   useEffect(() => {
     setUser(userStore.user);
     setDarkTheme(preferenceStore.theme=="dark");

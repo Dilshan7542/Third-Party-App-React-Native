@@ -1,25 +1,29 @@
 import React, {useEffect, useState} from "react";
 import {Alert, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/Store";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "@/store/Store";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {ThemedText} from "@/components/ThemedText";
 import {processPaymentApi} from "@/service/client-service";
 import {SUCCESS} from "@/constants/ResponseCode";
 import {ThemedView} from "@/components/ThemedView";
-import RNPickerSelect from "react-native-picker-select";
+import DropDownPicker from "react-native-dropdown-picker";
+import {loadingStatus} from "@/store/user/UserAction";
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface LabelAccount {
   label: string,
   value: string
 }
-
-const TestScreen = () => {
+export function Test  ()  {
   const useStore = useSelector((store: RootState) => store.user);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
+  const dispatch = useDispatch<AppDispatch>();
+  const [isClick, setIsClick] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<string>("");
   const [bankList, setBankList] = useState<LabelAccount[]>([])
   const [detail, setDetail] = useState<CheckoutTransaction | undefined>();
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     try {
       const data = checkoutStore.data;
@@ -31,94 +35,120 @@ const TestScreen = () => {
         setBankList(labelAccount);
         setDetail(data);
       }
-    } catch (e) {
-      Alert.alert("Error :  ", JSON.stringify(e));
+    }catch (e){
+      Alert.alert("Error :  ",JSON.stringify(e));
     }
 
-  }, []);
-  const processPayment = () => {
-    if (useStore.user && detail) {
-      processPaymentApi({
-        nic: useStore.user.nic,
-        amount: detail.amount,
-        transactionRef: detail.ref
-      }).then(resp => {
-        console.log(resp);
+  }, [checkoutStore]);
+  const processPayment=()=>{
+    setIsClick(true);
+    if (!useStore.user) {
+      Alert.alert("user not exist :  ",JSON.stringify(useStore));
+    }
+    if(!detail){
+      Alert.alert("detail not exist:  ",JSON.stringify(detail));
+    }
+    if(useStore.user && detail){
+      setIsClick(true);
+      const req= {
+        nic:useStore.user.nic,
+        amount:detail.amount,
+        transactionRef:detail.ref
+      }
+      dispatch(loadingStatus(true));
+      processPaymentApi(req).then(resp=>{
         if (resp.status === SUCCESS) {
           openBrowser(resp.content.webUrl);
+        }else{
+          setIsClick(false);
         }
-      }).catch(e => {
+      }).catch(e=>{
         console.error(e);
+        setIsClick(false);
+        Alert.alert("response payment failed:  ",JSON.stringify(e));
+      }).finally(()=>{
+        setIsClick(false);
+        dispatch(loadingStatus(false));
       });
     }
 
   }
-  useEffect(() => {
-    Alert.alert("data  detail USER EFFECT 2:  ", JSON.stringify(detail));
-  }, [detail]);
   const openBrowser = (url: string) => {
     Linking.openURL(url).catch((err) => console.error("An error occurred", err));
   };
-  if (!detail) {
+  if(!detail){
     return (
-      <ThemedView>
+      <SafeAreaView>
         <ThemedText>Test</ThemedText>
-        <TouchableOpacity style={styles.button} onPress={() => {
-          if (detail) {
-            Alert.alert("checkout data :  ", JSON.stringify(detail));
-          } else {
+        <TouchableOpacity style={styles.button} onPress={()=>{
+          if(detail){
+            Alert.alert("checkout data :  ",JSON.stringify(detail));
+          }else{
             alert("Detail undefined");
           }
         }}>
           <Text style={styles.buttonText}>Test</Text>
         </TouchableOpacity>
-      </ThemedView>)
+      </SafeAreaView>)
   }
   return (
     <ThemedView style={styles.container}>
-      <Text style={styles.title}>Fund Transfer</Text>
-      <ThemedView style={styles.section}>
-        <ThemedText style={styles.label}>From</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.section}>
-        <ThemedText style={styles.label}>From</ThemedText>
-        <RNPickerSelect
-          onValueChange={(value) => setSelectedAccount(value)}
-          items={bankList}
-          placeholder={{label: "Select an option...", value: null}}
-        />
-      </ThemedView>
-      <ThemedView style={styles.section}>
-        <ThemedText style={styles.label}>To Account</ThemedText>
-        <TextInput style={styles.input} placeholder="To account" value={detail.toAccount}/>
-      </ThemedView>
+      <ThemedView>
+        <ThemedText style={styles.title}>Fund Transfer</ThemedText>
+        <ThemedView style={styles.section}>
+          <ThemedText style={styles.label}>From</ThemedText>
+          <DropDownPicker
+            open={open}
+            value={selectedAccount}
+            items={bankList}
+            setOpen={setOpen}
+            setValue={setSelectedAccount}
+            setItems={setBankList}
+            placeholder="Select an account"
+            style={styles.dropdown}
+            dropDownContainerStyle={styles.dropdownContainer}
+          />
+        </ThemedView>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>Amount</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="LKR Enter amount"
-          keyboardType="numeric"
-          value={detail.amount.toString()}
-        />
-        {/* <Text style={styles.subText}>Your available balance, LKR {detail.amount.toString()}</Text>*/}
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Date</Text>
-        <Text style={styles.value}>{detail.date}</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Receiver's Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter beneficiary reference"
-          value={detail.accountName}
-        />
-      </View>
+        <ThemedView style={styles.section}>
+          <ThemedText style={styles.label}>To Account</ThemedText>
+          <TextInput style={styles.input} placeholder="To account" value={detail.toAccount} editable={false}  />
+        </ThemedView>
+        <ThemedView style={styles.section}>
+          <ThemedText style={styles.label}>Amount</ThemedText>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            value={detail.amount.toString()}
+            editable={false}
+          />
+        </ThemedView>
+        <ThemedView style={styles.section}>
+          <Text style={styles.label}>Date</Text>
+          <Text style={styles.value}>{detail.date}</Text>
+        </ThemedView>
+        <ThemedView style={styles.section}>
+          <Text style={styles.label}>Receiver's Name</Text>
+          <TextInput
+            style={styles.input}
+            value={detail.accountName}
+            editable={false}
+          />
+        </ThemedView>
+        <ThemedView style={styles.section}>
+          <Text style={styles.label}>Ref Number</Text>
+          <TextInput
+            style={styles.input}
+            value={detail.ref}
+            editable={false}
+          />
+        </ThemedView>
 
-      <TouchableOpacity style={styles.button} onPress={processPayment}>
-        <Text style={styles.buttonText}>Proceed to pay</Text>
-      </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} disabled={isClick}  onPress={processPayment}>
+          <Text style={styles.buttonText}>Proceed to pay</Text>
+        </TouchableOpacity>
+      </ThemedView>
     </ThemedView>
   );
 };
@@ -127,7 +157,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
   },
   title: {
     fontSize: 20,
@@ -143,12 +172,14 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 16,
-    color: "#000",
+    color: "#ffffff",
   },
   subText: {
     fontSize: 12,
     color: "gray",
   },
+  dropdown: { borderColor: "#ccc", borderWidth: 1, borderRadius: 8 },
+  dropdownContainer: { borderColor: "#ccc" },
   input: {
     height: 40,
     borderBottomWidth: 1,
@@ -173,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TestScreen;
+

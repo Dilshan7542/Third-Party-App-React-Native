@@ -133,41 +133,43 @@ export default function AppScreen() {
   }
 
   return (<SafeAreaView style={styles.container}>
-    {/* Logo or Image */}
-    <Image
-      source={{
-        uri: "https://example.com/your-image.png", // Replace with your image URL
-      }}
-      style={styles.image}
-    />
-
-    {/* Welcome Text */}
-    <ThemedText style={styles.title}>Welcome to Our App</ThemedText>
-    <ThemedText style={styles.subtitle}>
-      Discover amazing features and get started on your journey!
-    </ThemedText>
-
-    {/* Get Started Button */}
-    <TouchableOpacity
-      style={styles.button}
-      onPress={() => navigation.push("/pages/login")} // Navigate to Home screen
-    >
-      <Text style={styles.buttonText}>Get Started</Text>
-    </TouchableOpacity>
+    <ThemedView style={{display:"flex",justifyContent:"space-evenly",alignItems:"center",height:"100%",width:"100%"}}>
+      <View style={{width:"100%"}}>
+        <Image
+          source={require("../assets/images/start-page.jpg")}
+          style={styles.image}
+        />
+      </View>
+      <View style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+        <ThemedText style={styles.title}>Welcome to Our App</ThemedText>
+        <ThemedText style={styles.subtitle}>
+          Discover amazing features and get started on your journey!
+        </ThemedText>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.push("/pages/login")} // Navigate to Home screen
+        >
+          <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
+      </View>
+    </ThemedView>
   </SafeAreaView>);
 }
 
 const styles = StyleSheet.create({
   container: {
     display:"flex",
-    flex: 1, justifyContent: "center", alignItems: "center", // Background color
-    paddingHorizontal: 20,
-  }, image: {
-    width: 200, height: 200, marginBottom: 20,
-  }, title: {
+    flex: 1, alignItems: "center", // Background color
+  },
+  image: {
+    width: "100%", height: 250, marginBottom: 20,borderRadius:12
+  },
+  title: {
+    padding:10,
     fontSize: 28, fontWeight: "bold", textAlign: "center", marginBottom: 10,
-  }, subtitle: {
-    fontSize: 16, color: "#666", textAlign: "center", marginBottom: 30,
+  },
+  subtitle: {
+    fontSize: 16, textAlign: "center", marginBottom: 30,
   }, button: {
     backgroundColor: "#007bff", // Button color
     paddingVertical: 15, paddingHorizontal: 40, borderRadius: 10,

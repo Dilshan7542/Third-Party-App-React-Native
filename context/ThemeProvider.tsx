@@ -16,11 +16,10 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(getColorScheme()==="dark");
   const preferencesStore = useSelector((store:RootState)=> store.preference);
+  const [isDarkMode, setIsDarkMode] = useState(preferencesStore.theme==="dark");
   useEffect(() => {
     setIsDarkMode(preferencesStore.theme==="dark");
-    console.log(preferencesStore)
   }, [preferencesStore]);
 
   const toggleTheme = async () => {

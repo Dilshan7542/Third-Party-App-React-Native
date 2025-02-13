@@ -98,8 +98,8 @@ export default function DashBoard() {
           <DashboardSlider></DashboardSlider>
         </ThemedView>
         <ThemedView style={styles.tileCartSection}>
-          {tileCartList.map(list=>
-            <View style={styles.tileCartItem}>
+          {tileCartList.map((list,index)=>
+            <View style={styles.tileCartItem} key={index}>
               <ThemedView style={styles.tileCartChild} lightColor={"#ffffff"}>
                 <ThemedText>{list.name}</ThemedText>
               </ThemedView>
@@ -273,6 +273,6 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   cartImage: {
-    width:40, height: 40, borderRadius: 5
+    width:40, height: 40, borderRadius: 5,padding:10
   }
 });
