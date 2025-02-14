@@ -119,7 +119,7 @@ export default function AppScreen() {
           dispatch(readyToCheckout(trans));
           navigation.navigate("/pages/checkout");
         } else {
-          alert(`Faield 01: ${resp.message}`);
+          Alert.alert("Response Error  ",JSON.stringify(resp));
         }
       } else {
         alert("User data not found in store.");
