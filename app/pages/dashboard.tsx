@@ -50,7 +50,7 @@ export default function DashBoard() {
           openBrowser(url);
         }).catch(error => {
           console.log(error)
-          alert(error);
+          Alert.alert("Check User Error",JSON.stringify(error));
         });
 
       })
