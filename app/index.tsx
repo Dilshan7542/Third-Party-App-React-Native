@@ -15,16 +15,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {loadingStatus} from "@/store/user/UserAction";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
-import {TaskManagerTaskBody} from "expo-task-manager";
 
-  const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 export default function AppScreen() {
   const authStore = useSelector((store: RootState) => store.auth);
-  const checkoutStore = useSelector((store: RootState) => store.checkout);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useRouter();
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);
   const notificationListener = useRef<Notifications.EventSubscription>();
   const responseListener = useRef<Notifications.EventSubscription>();
   Notifications.setNotificationHandler({
@@ -34,30 +29,24 @@ export default function AppScreen() {
   });
   useEffect(() => {
     dispatch(loadingStatus(false));
-
     if (Platform.OS !== "web") {
       setUpNotification();
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
         Alert.alert("APP ON Notification ",JSON.stringify(notification));
-        handleNotificationResponse(notification.request,"APP ON")
+        handleNotificationResponse(notification.request);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         if (response) {
          // Alert.alert("Received Notification ", JSON.stringify(response))
-          handleNotificationResponse(response.notification.request,"Received")
+          handleNotificationResponse(response.notification.request)
         }else{
           alert("Received Response undefined");
         }
       });
 
       Notifications.getLastNotificationResponseAsync().then(response => {
-      /*  if(response){
-        Alert.alert("Last Notification ", JSON.stringify(response))
-        }else{
-        Alert.alert("Last undefined");
-        }*/
         if (response) {
-          handleNotificationResponse(response.notification.request,"GET");
+          handleNotificationResponse(response.notification.request);
         }
       });
       return () => {
@@ -68,40 +57,24 @@ export default function AppScreen() {
     isUserLogged();
   }, []);
 
-  async function registerBackgroundNotificationTask() {
-    const isRegistered = await TaskManager.isTaskRegisteredAsync(
-      BACKGROUND_NOTIFICATION_TASK
-    );
-    if (!isRegistered) {
-      await Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
-      console.log("Background notification task registered.");
-    }
 
-
-  }
-  const handleNotificationResponse = async (request: Notifications.NotificationRequest,location:string) => {
-   // alert(location);
+  const handleNotificationResponse = async (request: Notifications.NotificationRequest) => {
     try {
-
       const stateUser = store.getState().user;
       let dataString = request.content.data;
       let data: any = typeof dataString === "string" ? JSON.parse(dataString) : dataString;
- //     console.log("Notification Data:", data);
-      // Fetch user state
       if (stateUser?.user) {
         const resp = await readyToCheckoutApi(stateUser.user.nic);
-     //   Alert.alert("Response Api ",JSON.stringify(resp));
         if (resp.status === SUCCESS) {
           const content = resp.content;
           const newDate = new Date();
           const date = newDate.toISOString().split("T")[0] + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getMilliseconds();
-
           const trans = {
             date,
             accountName: content.toAccountName,
             fromAccountList: content.fromAccountList,
             toAccount: content.toAccount,
-            amount: data.amount || 1000000,
+            amount: data.amount,
             ref: data.refNumber
           };
        //   Alert.alert("Trans ",JSON.stringify(trans));
@@ -118,7 +91,7 @@ export default function AppScreen() {
     }
   };
 
-  async function isUserLogged() {
+ function isUserLogged() {
       setTimeout(() => {
     if (authStore.token) {
         navigation.navigate({pathname: "/pages/dashboard"});
@@ -138,9 +111,7 @@ export default function AppScreen() {
           await AsyncStorage.setItem("app-push", pushID)
           dispatch(setAuthPushId(pushID));
         }
-        setExpoPushToken(pushID ?? '')
-      })
-      .catch((error: any) => setExpoPushToken(`${error}`));
+      });
 
   }
 

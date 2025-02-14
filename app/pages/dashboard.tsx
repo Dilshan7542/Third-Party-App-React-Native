@@ -11,9 +11,9 @@ import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {readyToCheckout} from "@/store/checkout/CheckoutAction";
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
 import DashboardSlider from "@/components/sliders/DashboardSlider";
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+
 import ScrollView = Animated.ScrollView;
+import {loadingStatus} from "@/store/user/UserAction";
 const tileCartList:{name:string,icon:string,url:string}[]=[
   {name:"Pay",icon:"",url:""},
   {name:"Scan QR",icon:"",url:""},
@@ -42,19 +42,23 @@ export default function DashBoard() {
   }
 
   const redirect = async () => {
+
     registerForPushNotificationsAsync()
       .then(async pushID => {
-        if (pushID) startSession(pushID).then(resp => {
-          console.log(resp);
-          let url = resp.content.url;
-          openBrowser(url);
-        }).catch(error => {
-          console.log(error)
-          Alert.alert("Check User Error",JSON.stringify(error));
-        });
-
-      })
-      .catch((error: any) => {
+        dispatch(loadingStatus(true));
+        if (pushID) {
+          startSession(pushID).then(resp => {
+            console.log(resp);
+            let url = resp.content.url;
+            openBrowser(url);
+          }).catch(error => {
+            console.log(error)
+            Alert.alert("Check User Error",JSON.stringify(error));
+          }).finally(()=>{
+            dispatch(loadingStatus(false));
+          });
+        }
+      }).catch((error: any) => {
       });
   }
   const openBrowser = (url: string) => {
@@ -75,7 +79,7 @@ export default function DashBoard() {
     Alert.alert("Build Trans", JSON.stringify(trans));
     dispatch(readyToCheckout(trans))
     if (status === 1) {
-      navigation.push({
+      navigation.navigate({
         pathname: "/pages/test"
       });
     }
@@ -197,33 +201,6 @@ export default function DashBoard() {
               <ThemedText>Test 01</ThemedText>
             </ThemedView>
           </TouchableOpacity>
-
-          {/* <TouchableOpacity style={styles.cartItem} onPress={()=>{test(1)}}>
-      <ThemedView style={styles.cartChildItem}>
-        <Image
-          source={require("../../assets/images/nlb.png")}
-          style={styles.cartImage}/>
-        <ThemedText>Test 01</ThemedText>
-      </ThemedView>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.cartItem} onPress={()=>{test(2)}}>
-      <ThemedView style={styles.cartChildItem}>
-        <Image
-          source={require("../../assets/images/nlb.png")}
-          style={styles.cartImage}/>
-        <ThemedText>Test 02</ThemedText>
-      </ThemedView>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.cartItem} onPress={()=>{test(3)}}>
-      <ThemedView style={styles.cartChildItem}>
-        <Image
-          source={require("../../assets/images/nlb.png")}
-          style={styles.cartImage}/>
-        <ThemedText>Test 03</ThemedText>
-      </ThemedView>
-    </TouchableOpacity>*/}
-
-
         </ThemedView>
       </ThemedView>
 

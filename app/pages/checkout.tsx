@@ -10,6 +10,7 @@ import {ThemedView} from "@/components/ThemedView";
 import DropDownPicker from "react-native-dropdown-picker";
 import {loadingStatus} from "@/store/user/UserAction";
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {getColor} from "@/constants/Colors";
 
 interface LabelAccount {
   label: string,
@@ -89,7 +90,7 @@ const FundTransferScreen = () => {
            alert("Detail undefined");
          }
        }}>
-         <Text style={styles.buttonText}>Test</Text>
+         <ThemedText style={styles.buttonText}>Test</ThemedText>
        </TouchableOpacity>
      </SafeAreaView>)
   }
@@ -126,11 +127,11 @@ const FundTransferScreen = () => {
         />
       </ThemedView>
       <ThemedView style={styles.section}>
-        <Text style={styles.label}>Date</Text>
-        <Text style={styles.value}>{detail.date}</Text>
+        <ThemedText style={styles.label}>Date</ThemedText>
+        <ThemedText style={styles.value}>{detail.date}</ThemedText>
       </ThemedView>
       <ThemedView style={styles.section}>
-        <Text style={styles.label}>Receiver's Name</Text>
+        <ThemedText style={styles.label}>Receiver's Name</ThemedText>
         <TextInput
           style={styles.input}
           value={detail.accountName}
@@ -138,7 +139,7 @@ const FundTransferScreen = () => {
         />
       </ThemedView>
       <ThemedView style={styles.section}>
-        <Text style={styles.label}>Ref Number</Text>
+        <ThemedText style={styles.label}>Ref Number</ThemedText>
         <TextInput
           style={styles.input}
           value={detail.ref}
@@ -148,7 +149,7 @@ const FundTransferScreen = () => {
 
 
       <TouchableOpacity style={styles.button} disabled={isClick}  onPress={processPayment}>
-        <Text style={styles.buttonText}>Proceed to pay</Text>
+        <ThemedText style={styles.buttonText}>Proceed to pay</ThemedText>
       </TouchableOpacity>
     </ThemedView>
     </ThemedView>
@@ -183,6 +184,7 @@ const styles = StyleSheet.create({
   dropdownContainer: { borderColor: "#ccc" },
   input: {
     height: 40,
+    color:getColor().text,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     fontSize: 16,

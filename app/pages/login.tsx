@@ -6,10 +6,8 @@ import {ThemedText} from "@/components/ThemedText";
 import {useSelector,useDispatch} from "react-redux";
 import {AppDispatch, RootState} from "@/store/Store";
 import {loadingStatus, userLoginAsync} from "@/store/user/UserAction";
-import AppLoader from "@/components/AppLoader";
-import {SafeAreaView} from "react-native-safe-area-context";
-import DashBoard from "@/app/pages/dashboard";
 import DashboardSlider from "@/components/sliders/DashboardSlider";
+import {getColor} from "@/constants/Colors";
 
 const LoginScreen = () => {
   const params = useLocalSearchParams();
@@ -55,6 +53,7 @@ const LoginScreen = () => {
      <ThemedView>
        <TextInput
          style={styles.input}
+         placeholderTextColor={getColor().placeholder}
          placeholder="NIC"
          value={nic}
          onChangeText={setNic}
@@ -62,6 +61,7 @@ const LoginScreen = () => {
        />
        <TextInput
          style={styles.input}
+         placeholderTextColor={getColor().placeholder}
          placeholder="Password"
          value={password}
          onChangeText={setPassword}
@@ -77,6 +77,7 @@ const LoginScreen = () => {
        </ThemedView>
      </ThemedView>
    </View>
+
  </View>
   </ThemedView>);
 };
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 50,
-    backgroundColor: "#fff",
+    color:getColor().text,
     paddingHorizontal: 15,
     marginBottom: 15,
     borderRadius: 5,

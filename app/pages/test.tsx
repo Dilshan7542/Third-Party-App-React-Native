@@ -10,12 +10,14 @@ import {ThemedView} from "@/components/ThemedView";
 import DropDownPicker from "react-native-dropdown-picker";
 import {loadingStatus} from "@/store/user/UserAction";
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {getColor} from "@/constants/Colors";
 
 interface LabelAccount {
   label: string,
   value: string
 }
-export function Test  ()  {
+
+const Test = () => {
   const useStore = useSelector((store: RootState) => store.user);
   const checkoutStore = useSelector((store: RootState) => store.checkout);
   const dispatch = useDispatch<AppDispatch>();
@@ -36,7 +38,7 @@ export function Test  ()  {
         setDetail(data);
       }
     }catch (e){
-      Alert.alert("Error :  ",JSON.stringify(e));
+      Alert.alert("Error checkout :  ",JSON.stringify(e));
     }
 
   }, [checkoutStore]);
@@ -57,6 +59,7 @@ export function Test  ()  {
       }
       dispatch(loadingStatus(true));
       processPaymentApi(req).then(resp=>{
+
         if (resp.status === SUCCESS) {
           openBrowser(resp.content.webUrl);
         }else{
@@ -124,11 +127,11 @@ export function Test  ()  {
           />
         </ThemedView>
         <ThemedView style={styles.section}>
-          <Text style={styles.label}>Date</Text>
-          <Text style={styles.value}>{detail.date}</Text>
+          <ThemedText style={styles.label}>Date</ThemedText>
+          <ThemedText style={styles.value}>{detail.date}</ThemedText>
         </ThemedView>
         <ThemedView style={styles.section}>
-          <Text style={styles.label}>Receiver's Name</Text>
+          <ThemedText style={styles.label}>Receiver's Name</ThemedText>
           <TextInput
             style={styles.input}
             value={detail.accountName}
@@ -136,15 +139,13 @@ export function Test  ()  {
           />
         </ThemedView>
         <ThemedView style={styles.section}>
-          <Text style={styles.label}>Ref Number</Text>
+          <ThemedText style={styles.label}>Ref Number</ThemedText>
           <TextInput
             style={styles.input}
             value={detail.ref}
             editable={false}
           />
         </ThemedView>
-
-
         <TouchableOpacity style={styles.button} disabled={isClick}  onPress={processPayment}>
           <Text style={styles.buttonText}>Proceed to pay</Text>
         </TouchableOpacity>
@@ -172,7 +173,6 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 16,
-    color: "#ffffff",
   },
   subText: {
     fontSize: 12,
@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   dropdownContainer: { borderColor: "#ccc" },
   input: {
     height: 40,
+    color:getColor().text,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     fontSize: 16,
@@ -198,10 +199,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonText: {
-    color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
   },
 });
 
-
+export default Test;
