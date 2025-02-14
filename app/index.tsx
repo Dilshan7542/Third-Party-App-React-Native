@@ -37,7 +37,6 @@ export default function AppScreen() {
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         if (response) {
-         // Alert.alert("Received Notification ", JSON.stringify(response))
           handleNotificationResponse(response.notification.request)
         }else{
           alert("Received Response undefined");
