@@ -28,8 +28,8 @@ export const getAllUsers = async () => {
     throw e.message;
   }
 }
-export const startSession=async (nic:string,pushId:string)=>{
-  const response = await apiClient.post<AppResponse<{ url: string }>>("/third-party/user/check-user",{nicNumber:nic,pushId:pushId});
+export const startSession=async (pushId:string)=>{
+  const response = await apiClient.post<AppResponse<{ url: string }>>("/third-party/user/check-user",{pushId:pushId});
   console.log(response);
   return response.data;
 }

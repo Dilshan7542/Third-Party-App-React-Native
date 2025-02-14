@@ -44,7 +44,7 @@ export default function DashBoard() {
   const redirect = async () => {
     registerForPushNotificationsAsync()
       .then(async pushID => {
-        if (pushID && user) startSession(user.nic, pushID).then(resp => {
+        if (pushID) startSession(pushID).then(resp => {
           console.log(resp);
           let url = resp.content.url;
           openBrowser(url);
