@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useRouter} from "expo-router";
 import * as Notifications from 'expo-notifications';
 import {registerForPushNotificationsAsync} from "@/util/push-notification";
@@ -44,14 +44,21 @@ export default function AppScreen() {
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         if (response) {
-          handleNotificationResponse(response)
+          Alert.alert("Received Notification ", JSON.stringify(response))
+          handleNotificationResponse(response,"Received")
+        }else{
+          alert("Received Response undefined");
         }
       });
 
       Notifications.getLastNotificationResponseAsync().then(response => {
-        alert("is work");
+        if(response){
+        Alert.alert("Last Notification ", JSON.stringify(response))
+        }else{
+        Alert.alert("Last undefined");
+        }
         if (response) {
-          handleNotificationResponse(response);
+          handleNotificationResponse(response,"GET");
         }
       });
       return () => {
@@ -84,7 +91,8 @@ export default function AppScreen() {
     });
 
   }
-  const handleNotificationResponse = async (response: Notifications.NotificationResponse) => {
+  const handleNotificationResponse = async (response: Notifications.NotificationResponse,location:string) => {
+    alert(location)
     try {
       let dataString = response.notification.request.content.data;
       let data: any = typeof dataString === "string" ? JSON.parse(dataString) : dataString;
@@ -93,6 +101,7 @@ export default function AppScreen() {
       const stateUser = store.getState().user;
       if (stateUser?.user) {
         const resp = await readyToCheckoutApi(stateUser.user.nic);
+        Alert.alert("Response Api ",JSON.stringify(resp));
         if (resp.status === "SUCCESS") {
           const content = resp.content;
           const newDate = new Date();
@@ -106,11 +115,11 @@ export default function AppScreen() {
             amount: data.amount || 1000000,
             ref: data.refNumber
           };
-
+          Alert.alert("Trans ",JSON.stringify(trans));
           dispatch(readyToCheckout(trans));
           navigation.navigate("/pages/checkout");
         } else {
-          alert(`Error: ${resp.message}`);
+          alert(`Faield 01: ${resp.message}`);
         }
       } else {
         alert("User data not found in store.");
