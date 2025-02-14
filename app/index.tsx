@@ -37,8 +37,6 @@ export default function AppScreen() {
 
     if (Platform.OS !== "web") {
       setUpNotification();
-      registerBackgroundNotificationTask();
-
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
         setNotification(notification);
       });
@@ -77,31 +75,20 @@ export default function AppScreen() {
       await Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
       console.log("Background notification task registered.");
     }
-    // @ts-ignore
-    TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error }) => {
-      alert("BackGround Work");
 
-      if (error) {
-      alert("BackGround Error = "+ JSON.stringify(error));
-
-      }
-      if (data) {
-      alert("BackGround Data = "+ JSON.stringify(data));
-      }
-    });
 
   }
   const handleNotificationResponse = async (response: Notifications.NotificationResponse,location:string) => {
-    alert(location)
+   // alert(location);
     try {
+      const stateUser = store.getState().user;
       let dataString = response.notification.request.content.data;
       let data: any = typeof dataString === "string" ? JSON.parse(dataString) : dataString;
-      console.log("Notification Data:", data);
+ //     console.log("Notification Data:", data);
       // Fetch user state
-      const stateUser = store.getState().user;
       if (stateUser?.user) {
         const resp = await readyToCheckoutApi(stateUser.user.nic);
-        Alert.alert("Response Api ",JSON.stringify(resp));
+     //   Alert.alert("Response Api ",JSON.stringify(resp));
         if (resp.status === SUCCESS) {
           const content = resp.content;
           const newDate = new Date();
@@ -115,7 +102,7 @@ export default function AppScreen() {
             amount: data.amount || 1000000,
             ref: data.refNumber
           };
-          Alert.alert("Trans ",JSON.stringify(trans));
+       //   Alert.alert("Trans ",JSON.stringify(trans));
           dispatch(readyToCheckout(trans));
           navigation.navigate("/pages/checkout");
         } else {
@@ -130,11 +117,11 @@ export default function AppScreen() {
   };
 
   async function isUserLogged() {
-    if (authStore.token) {
       setTimeout(() => {
+    if (authStore.token) {
         navigation.navigate({pathname: "/pages/dashboard"});
-      }, 100)
     }
+      }, 100);
   }
 
   function setUpNotification() {

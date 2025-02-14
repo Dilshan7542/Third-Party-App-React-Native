@@ -18,6 +18,9 @@ const LoginScreen = () => {
   const useStore = useSelector((store:RootState)=> store.user);
   const tokenStore = useSelector((store:RootState)=> store.auth);
   const dispatch = useDispatch<AppDispatch>();
+  const [nic, setNic] = useState(nicPram ? nicPram:"");
+  const [password, setPassword] = useState("");
+  const navigation = useRouter();
   useEffect(() => {
     checkUserIfExist();
   }, []);
@@ -26,20 +29,16 @@ const LoginScreen = () => {
       navigation.push({pathname: "/pages/dashboard"});
     }
   }
-
-  const [nic, setNic] = useState(nicPram ? nicPram:"");
-  const [password, setPassword] = useState("");
-  const navigation = useRouter();
   const handleLogin = () => {
  dispatch(loadingStatus(true));
     if (!nic || !password) {
-      Alert.alert("Error", "Please fill out all fields!");
+      Alert.alert("Error login 01", "Please fill out all fields!");
     } else {
         dispatch(userLoginAsync({nic,password})).then(res=>{
           navigation.push({pathname: "/pages/dashboard"});
           console.log(res);
         }).catch(error=>{
-        Alert.alert("Error",JSON.stringify(error));
+        Alert.alert("Error Login 02",JSON.stringify(error));
         }).finally(()=>{
           dispatch(loadingStatus(false));
           });

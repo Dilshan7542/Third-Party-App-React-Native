@@ -37,7 +37,7 @@ const FundTransferScreen = () => {
         setDetail(data);
       }
     }catch (e){
-      Alert.alert("Error :  ",JSON.stringify(e));
+      Alert.alert("Error checkout :  ",JSON.stringify(e));
     }
 
   }, [checkoutStore]);
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 16,
-    color: "#ffffff",
   },
   subText: {
     fontSize: 12,
@@ -200,7 +199,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonText: {
-    color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
   },
