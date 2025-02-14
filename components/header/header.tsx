@@ -21,14 +21,10 @@ const AppHeader = () => {
   const userStore = useSelector((store: RootState) => store.user);
   const preferenceStore = useSelector((store: RootState) => store.preference);
   const [isDarkTheme, setDarkTheme] = useState(preferenceStore.theme=="dark");
+
   useEffect(() => {
     setUser(userStore.user);
     setDarkTheme(preferenceStore.theme=="dark");
-    if(isDarkTheme){
-      dispatch(themeColorAction("dark"));
-    }else{
-      dispatch(themeColorAction("light"));
-    }
   }, [userStore]);
   const toggleSwitch = () => setDarkTheme(theme => {
     if (theme) {
