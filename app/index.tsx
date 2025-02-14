@@ -38,25 +38,26 @@ export default function AppScreen() {
     if (Platform.OS !== "web") {
       setUpNotification();
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-        setNotification(notification);
+        Alert.alert("APP ON Notification ",JSON.stringify(notification));
+        handleNotificationResponse(notification.request,"APP ON")
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         if (response) {
-          Alert.alert("Received Notification ", JSON.stringify(response))
-          handleNotificationResponse(response,"Received")
+         // Alert.alert("Received Notification ", JSON.stringify(response))
+          handleNotificationResponse(response.notification.request,"Received")
         }else{
           alert("Received Response undefined");
         }
       });
 
       Notifications.getLastNotificationResponseAsync().then(response => {
-        if(response){
+      /*  if(response){
         Alert.alert("Last Notification ", JSON.stringify(response))
         }else{
         Alert.alert("Last undefined");
-        }
+        }*/
         if (response) {
-          handleNotificationResponse(response,"GET");
+          handleNotificationResponse(response.notification.request,"GET");
         }
       });
       return () => {
@@ -78,11 +79,12 @@ export default function AppScreen() {
 
 
   }
-  const handleNotificationResponse = async (response: Notifications.NotificationResponse,location:string) => {
+  const handleNotificationResponse = async (request: Notifications.NotificationRequest,location:string) => {
    // alert(location);
     try {
+
       const stateUser = store.getState().user;
-      let dataString = response.notification.request.content.data;
+      let dataString = request.content.data;
       let data: any = typeof dataString === "string" ? JSON.parse(dataString) : dataString;
  //     console.log("Notification Data:", data);
       // Fetch user state
