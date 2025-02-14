@@ -102,7 +102,7 @@ export default function AppScreen() {
       if (stateUser?.user) {
         const resp = await readyToCheckoutApi(stateUser.user.nic);
         Alert.alert("Response Api ",JSON.stringify(resp));
-        if (resp.status === "SUCCESS") {
+        if (resp.status === SUCCESS) {
           const content = resp.content;
           const newDate = new Date();
           const date = newDate.toISOString().split("T")[0] + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getMilliseconds();
