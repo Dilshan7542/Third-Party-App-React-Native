@@ -42,7 +42,6 @@ export default function AppScreen() {
           alert("Received Response undefined");
         }
       });
-
       Notifications.getLastNotificationResponseAsync().then(response => {
         if (response) {
           handleNotificationResponse(response.notification.request);
