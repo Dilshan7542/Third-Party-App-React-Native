@@ -6,7 +6,7 @@ import {store} from "@/store/Store";
 
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
- export const theme= store.getState().preference.theme;
+
 export const Colors = {
   light: {
     text: '#11181C',
@@ -26,7 +26,7 @@ export const Colors = {
   },
 };
 export const getColor=()=>{
-
+ const theme= store.getState().preference.theme;
   let color={
     text: '#ECEDEE',
     placeholder:'#8d8a8a',

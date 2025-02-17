@@ -9,7 +9,7 @@ import {AppDispatch, RootState} from "@/store/Store";
 import {openBrowserAsync} from "expo-web-browser";
 import {CheckoutTransaction} from "@/store/checkout/CheckoutReducer";
 import {readyToCheckout} from "@/store/checkout/CheckoutAction";
-import {registerForPushNotificationsAsync} from "@/util/push-notification";
+import {getPushIdAsync, registerForPushNotificationsAsync} from "@/util/push-notification";
 import DashboardSlider from "@/components/sliders/DashboardSlider";
 
 import ScrollView = Animated.ScrollView;
@@ -43,7 +43,7 @@ export default function DashBoard() {
 
   const redirect = async () => {
 
-    registerForPushNotificationsAsync()
+    getPushIdAsync()
       .then(async pushID => {
         dispatch(loadingStatus(true));
         if (pushID) {

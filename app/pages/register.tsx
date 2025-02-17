@@ -38,8 +38,8 @@ export default function Register() {
     })
   };
   return (
-   <SafeAreaView style={styles.container}>
-     <ThemedView >
+   <ThemedView style={styles.container}>
+     <ThemedView>
        <ThemedText style={styles.title}>Register</ThemedText>
        <Controller
          control={control}
@@ -50,6 +50,7 @@ export default function Register() {
              onBlur={onBlur}
              onChangeText={onChange}
              value={value}
+             placeholderTextColor={getColor().placeholder}
            />
          )}
          name="nic"
@@ -66,6 +67,7 @@ export default function Register() {
              onBlur={onBlur}
              onChangeText={onChange}
              value={value}
+             placeholderTextColor={getColor().placeholder}
            />
          )}
          name="firstName"
@@ -82,6 +84,7 @@ export default function Register() {
              onBlur={onBlur}
              onChangeText={onChange}
              value={value}
+             placeholderTextColor={getColor().placeholder}
            />
          )}
          name="lastName"
@@ -99,6 +102,7 @@ export default function Register() {
              onChangeText={onChange}
              value={value}
              keyboardType="email-address"
+             placeholderTextColor={getColor().placeholder}
            />
          )}
          name="email"
@@ -116,6 +120,7 @@ export default function Register() {
              onChangeText={onChange}
              value={value}
              keyboardType="phone-pad"
+             placeholderTextColor={getColor().placeholder}
            />
          )}
          name="mobileNumber"
@@ -133,6 +138,7 @@ export default function Register() {
              onChangeText={onChange}
              value={value}
              secureTextEntry
+             placeholderTextColor={getColor().placeholder}
            />
          )}
          name="password"
@@ -148,7 +154,7 @@ export default function Register() {
          </Link>
        </ThemedView>
      </ThemedView>
-   </SafeAreaView>
+   </ThemedView>
   );
 }
 

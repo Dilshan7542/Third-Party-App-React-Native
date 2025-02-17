@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Alert, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useRouter} from "expo-router";
 import * as Notifications from 'expo-notifications';
-import {registerForPushNotificationsAsync} from "@/util/push-notification";
+import {getPushIdAsync, registerForPushNotificationsAsync} from "@/util/push-notification";
 import {useDispatch, useSelector} from "react-redux";
 
 import * as TaskManager from 'expo-task-manager';
@@ -25,7 +25,7 @@ export default function AppScreen() {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true, shouldPlaySound: true, shouldSetBadge: true,
-    }),
+    })
   });
   useEffect(() => {
     dispatch(loadingStatus(false));
@@ -46,9 +46,6 @@ export default function AppScreen() {
         if (response) {
           handleNotificationResponse(response.notification.request);
         }
-        Notifications.getPresentedNotificationsAsync().then(response=>{
-          Alert.alert("Precent Notification ",JSON.stringify(response));
-        })
       });
       return () => {
         notificationListener.current && Notifications.removeNotificationSubscription(notificationListener.current);
@@ -101,19 +98,14 @@ export default function AppScreen() {
   }
 
   function setUpNotification() {
-    Notifications.setNotificationHandler({
-      handleNotification: async () => ( {
-        shouldShowAlert: true, shouldPlaySound: true, shouldSetBadge: true,
-      }),
-    });
-    registerForPushNotificationsAsync()
-      .then(async pushID => {
-        if (pushID) {
-          await AsyncStorage.setItem("app-push", pushID)
-          dispatch(setAuthPushId(pushID));
-        }
-      });
-
+    registerForPushNotificationsAsync().then(()=>{
+      getPushIdAsync().then(async pushID => {
+          if (pushID) {
+            await AsyncStorage.setItem("app-push", pushID)
+            dispatch(setAuthPushId(pushID));
+          }
+        });
+    })
   }
 
   return (<SafeAreaView style={styles.container}>
@@ -134,7 +126,7 @@ export default function AppScreen() {
           style={styles.button}
           onPress={() => navigation.push("/pages/login")} // Navigate to Home screen
         >
-          <Text style={styles.buttonText}>Get Started</Text>
+          <ThemedText style={styles.buttonText}>Get Started</ThemedText>
         </TouchableOpacity>
       </View>
     </ThemedView>

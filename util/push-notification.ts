@@ -57,7 +57,7 @@ export async function registerForPushNotificationsAsync() {
     if (!projectId) {
       handleRegistrationError('Project ID not found');
     }
-    try {
+   /* try {
       const pushTokenString = (
         await Notifications.getExpoPushTokenAsync({
           projectId,
@@ -66,8 +66,26 @@ export async function registerForPushNotificationsAsync() {
       return pushTokenString;
     } catch (e: unknown) {
       handleRegistrationError(`${e}`);
-    }
+    }*/
   } else {
     handleRegistrationError('Must use physical device for push notifications');
+  }
+
+}
+export async function getPushIdAsync() {
+  const projectId =
+    Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+  if (!projectId) {
+    handleRegistrationError('Project ID not found');
+  }
+  try {
+    const pushTokenString = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId,
+      })
+    ).data;
+    return pushTokenString;
+  }catch (e){
+    handleRegistrationError(`${e}`);
   }
 }
