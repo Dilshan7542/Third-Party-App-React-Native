@@ -7,7 +7,7 @@ export interface PreferenceState{
   theme:ColorSchemeName
 }
 const init:PreferenceState={
-  theme:"dark"
+  theme:"light"
 }
 export const preferenceReducer=createReducer(init,(stateBuilder)=>{
    stateBuilder.addCase(themeColorAction,(state, action)=>{

@@ -8,6 +8,7 @@ import {ThemedView} from "@/components/ThemedView";
 import {Link, useRouter} from "expo-router";
 import {ThemedText} from "@/components/ThemedText";
 import {SafeAreaView} from "react-native-safe-area-context";
+import {getColor} from "@/constants/Colors";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -140,7 +141,7 @@ export default function Register() {
        {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
        <ThemedView style={{display:"flex",justifyContent:"space-between",gap:10}}>
          <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-           <Text style={styles.buttonText}>Register</Text>
+           <ThemedText style={styles.buttonText}>Register</ThemedText>
          </TouchableOpacity>
          <Link href={"/pages/login"} style={styles.buttonLogin}>
            <ThemedText style={{fontWeight:"bold",textAlign:"center"}}>Login</ThemedText>
@@ -166,6 +167,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: 'gray',
+    color:getColor().text,
     borderWidth: 1,
     borderRadius:6,
     marginBottom: 10,

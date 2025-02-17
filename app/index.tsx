@@ -33,7 +33,7 @@ export default function AppScreen() {
       setUpNotification();
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
         Alert.alert("APP ON Notification ",JSON.stringify(notification));
-        handleNotificationResponse(notification.request);
+       // handleNotificationResponse(notification.request);
       });
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         if (response) {
@@ -46,6 +46,9 @@ export default function AppScreen() {
         if (response) {
           handleNotificationResponse(response.notification.request);
         }
+        Notifications.getPresentedNotificationsAsync().then(response=>{
+          Alert.alert("Precent Notification ",JSON.stringify(response));
+        })
       });
       return () => {
         notificationListener.current && Notifications.removeNotificationSubscription(notificationListener.current);
@@ -99,7 +102,7 @@ export default function AppScreen() {
 
   function setUpNotification() {
     Notifications.setNotificationHandler({
-      handleNotification: async () => ({
+      handleNotification: async () => ( {
         shouldShowAlert: true, shouldPlaySound: true, shouldSetBadge: true,
       }),
     });
