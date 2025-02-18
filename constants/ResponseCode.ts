@@ -1,2 +1,2 @@
 
-export const SUCCESS="R000";
+export const SUCCESS="R0000";
